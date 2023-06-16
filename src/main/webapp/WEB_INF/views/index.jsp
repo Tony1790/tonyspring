@@ -22,6 +22,9 @@
 				<a href="/logout">로그아웃</a>
 				<sec:authentication property="principal" var="principal"/>
 				<h2>${principal}</h2>
+				<!-- principal은 현재 인증된 사용자. 
+				Spring Security를 사용하는 경우, principal은 보통 UserDetails 객체를 참조하게 됩니다. 
+				UserDetails는 사용자의 유저네임, 패스워드, 권한 정보 등을 포함하고 있습니다. -->
 			</sec:authorize>
 		</div>
 		<div>
@@ -30,5 +33,22 @@
 				<a href="/admin">관리자</a>
 			</sec:authorize>
 		</div>
+		 <table>
+      	<tr>
+      		<td>id</td>
+      		<td>title</td>
+      		<td>content</td>
+      		<td>writer</td>
+      	</tr>
+      	<c:forEach var="list" items="${list }">
+	      	<tr>
+	      		<td>${list.bId }</td>
+	      		<td>${list.bTitle }</td>
+	      		<td>${list.bContent }</td>
+	      		<td>${list.bWriter }</td>
+	      		<td>${list.bDateTime }</td>
+	      	</tr>
+      	</c:forEach>
+      </table>
 </body>
 </html>

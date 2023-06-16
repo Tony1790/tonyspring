@@ -11,7 +11,7 @@
 	
 	<!-- 회원 불러오기 -->
 	<select id="readUser" parameterType="String" resultType="User">
-		select u_id as username, u_password as password, u_name as uName, u_isAccountNonExpired as isAccountNonExpired, 
+		select u_id as username, u_password as password, u_name as uName,u_datetime as uDateTime, u_isAccountNonExpired as isAccountNonExpired, 
 				u_isAccountNonLocked as isAccountNonLocked, u_isCredentialNonExpired as isCredentialsNonExpired, u_isEnabled as isEnabled
 		FROM	tn_user
 		WHERE	1=1

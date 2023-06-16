@@ -5,7 +5,8 @@
 	      SELECT         b_id as bId,
 		                 b_title as bTitle,
 		                 b_content as bContent,
-		                 b_writer as bWriter
+		                 b_writer as bWriter,
+		                 b_datetime as bDateTime 
 	      FROM           tn_board
 	 </select>
 </mapper>

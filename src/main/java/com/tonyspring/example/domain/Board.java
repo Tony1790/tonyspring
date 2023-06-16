@@ -1,11 +1,13 @@
 package com.tonyspring.example.domain;
 
+import java.time.LocalDateTime;
+
 public class Board {
 	private int bId;
 	private String bTitle;
 	private String bContent;
 	private String bWriter;
-	private String bDateTime;
+	private LocalDateTime bDateTime;
 	
 	public int getbId() {
 		return bId;
@@ -31,10 +33,10 @@ public class Board {
 	public void setbWriter(String bWriter) {
 		this.bWriter = bWriter;
 	}
-	public String getbDateTime() {
+	public LocalDateTime getbDateTime() {
 		return bDateTime;
 	}
-	public void setbDateTime(String bDateTime) {
+	public void setbDateTime(LocalDateTime bDateTime) {
 		this.bDateTime = bDateTime;
 	}
 }

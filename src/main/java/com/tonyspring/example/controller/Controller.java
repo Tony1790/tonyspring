@@ -1,11 +1,14 @@
 package com.tonyspring.example.controller;
 
+import java.security.Principal;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
@@ -24,8 +27,7 @@ public class Controller {
 	@Autowired PasswordEncoder encoder;
 	
 	@RequestMapping("/")
-	public String home(Model model) {
-		
+	public String home(Model model, Principal principal) { 
 		List<Board> list = boardservice.selectBoardList();
 		model.addAttribute("list", list);
 		logger.debug("debug");

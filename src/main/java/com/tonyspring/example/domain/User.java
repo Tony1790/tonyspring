@@ -1,6 +1,8 @@
 package com.tonyspring.example.domain;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +15,7 @@ public class User implements UserDetails {
 	private String username;	//u_id
 	private String password;		//u_password
 	private String uName;			//u_name
-	private String uDateTime;	//u_datetime
+	private LocalDateTime uDateTime;	//u_datetime
 	
 	//security 관련
 	private Collection<? extends GrantedAuthority> authorities;
@@ -32,11 +34,11 @@ public class User implements UserDetails {
 		this.uName = uName;
 	}
 
-	public String getuDateTime() {
+	public LocalDateTime getuDateTime() {
 		return uDateTime;
 	}
 
-	public void setuDateTime(String uDateTime) {
+	public void setuDateTime(LocalDateTime uDateTime) {
 		this.uDateTime = uDateTime;
 	}
 
