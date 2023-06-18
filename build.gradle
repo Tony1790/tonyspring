@@ -20,7 +20,8 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
 	implementation 'org.springframework.session:spring-session-jdbc'
 	implementation 'org.springframework.security:spring-security-taglibs'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.3' // replace MySQL driver with MariaDB
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	
@@ -28,7 +29,6 @@ dependencies {
 	implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.69'
 	// https://mvnrepository.com/artifact/jstl/jstl
 	implementation group: 'jstl', name: 'jstl', version: '1.2'
-	
 }
 
 tasks.named('test') {

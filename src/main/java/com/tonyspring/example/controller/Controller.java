@@ -28,8 +28,8 @@ public class Controller {
 	
 	@RequestMapping("/")
 	public String home(Model model, Principal principal) {
-		Authentication authentication = (Authentication) principal;
-		UserDetails user = (User) authentication.getPrincipal(); 
+		//Authentication authentication = (Authentication) principal;
+		//UserDetails user = (User) authentication.getPrincipal(); 
 		List<Board> list = boardservice.selectBoardList();
 		model.addAttribute("list", list);
 		logger.debug("debug");
