@@ -33,22 +33,22 @@
 				<a href="/admin">관리자</a>
 			</sec:authorize>
 		</div>
-		 <table>
-      	<tr>
-      		<td>id</td>
-      		<td>title</td>
-      		<td>content</td>
-      		<td>writer</td>
-      	</tr>
-      	<c:forEach var="list" items="${list }">
+	  <table>
 	      	<tr>
-	      		<td>${list.bId }</td>
-	      		<td>${list.bTitle }</td>
-	      		<td>${list.bContent }</td>
-	      		<td>${list.bWriter }</td>
-	      		<td>${list.bDateTime }</td>
+	      		<td>id</td>
+	      		<td>title</td>
+	      		<td>content</td>
+	      		<td>writer</td>
 	      	</tr>
-      	</c:forEach>
+	      	<c:forEach var="list" items="${list }">
+		      	<tr>
+		      		<td>${list.bId }</td>
+		      		<td>${list.bTitle }</td>
+		      		<td>${list.bContent }</td>
+		      		<td>${list.bWriter }</td>
+		      		<td>${list.bDateTime }</td>
+		      	</tr>
+	      	</c:forEach>
       </table>
 </body>
 </html>

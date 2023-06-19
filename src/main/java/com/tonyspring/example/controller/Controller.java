@@ -20,16 +20,19 @@ import com.tonyspring.example.service.UserService;
 
 @org.springframework.stereotype.Controller
 public class Controller {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	@Autowired BoardService boardservice;
-	@Autowired UserService userservice;
-	@Autowired PasswordEncoder encoder;
-	
+	@Autowired
+	BoardService boardservice;
+	@Autowired
+	UserService userservice;
+	@Autowired
+	PasswordEncoder encoder;
+
 	@RequestMapping("/")
 	public String home(Model model, Principal principal) {
-		//Authentication authentication = (Authentication) principal;
-		//UserDetails user = (User) authentication.getPrincipal(); 
+		// Authentication authentication = (Authentication) principal;
+		// UserDetails user = (User) authentication.getPrincipal();
 		List<Board> list = boardservice.selectBoardList();
 		model.addAttribute("list", list);
 		logger.debug("debug");
@@ -37,62 +40,60 @@ public class Controller {
 		logger.error("error");
 		return "/index";
 	}
-	
-	@RequestMapping("/beforeSignUp") 
+
+	@RequestMapping("/beforeSignUp")
 	public String beforeSignUp() {
 		return "/signup";
 	}
-	
+
 	@RequestMapping("/signup")
 	public String signup(User user) {
-		//비밀번호 암호화
+		// 비밀번호 암호화
 		String encodedPassword = encoder.encode(user.getPassword());
-		
-		//유저 데이터 세팅
+
+		// 유저 데이터 세팅
 		user.setPassword(encodedPassword);
 		user.setAccountNonExpired(true);
 		user.setEnabled(true);
 		user.setAccountNonLocked(true);
 		user.setCredentialsNonExpired(true);
 		user.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));
-		
-		//유저 생성
+
+		// 유저 생성
 		userservice.createUser(user);
-		//유저 권한 생성
+		// 유저 권한 생성
 		userservice.createAuthorities(user);
-		
-	    return "/login";
+
+		return "/login";
 	}
-	
-	@RequestMapping(value="/login")
+
+	@RequestMapping(value = "/login")
 	public String beforeLogin(Model model) {
 		return "/login";
 	}
-	
-	@Secured({"ROLE_ADMIN"})
-	  @RequestMapping(value="/admin")
+
+	@Secured({ "ROLE_ADMIN" })
+	@RequestMapping(value = "/admin")
 	public String admin(Model model) {
 		return "/admin";
 	}
-	
-	@Secured({"ROLE_USER"})
-	@RequestMapping(value="/user/info")
+
+	@Secured({ "ROLE_ADMIN" })
+	@RequestMapping(value = "/user/list")
+	public String userList(Model model) {
+		List<User> userList = userservice.selectUserList();
+		model.addAttribute("userList",userList);
+		return "/user_list";
+	}
+
+	@Secured({ "ROLE_USER" })
+	@RequestMapping(value = "/user/info")
 	public String userInfo(Model model) {
 		return "/user_info";
 	}
-	
-	@RequestMapping(value="/denied")
-	   public String denied(Model model) {
-	      return "/denied";
-	   }
+
+	@RequestMapping(value = "/denied")
+	public String denied(Model model) {
+		return "/denied";
+	}
 }
-
-
-
-
-
-
-
-
-
-

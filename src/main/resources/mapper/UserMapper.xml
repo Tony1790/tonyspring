@@ -18,6 +18,14 @@
 		AND		u_id = #{username}
 	</select>
 	
+	<!-- 회원목록 불러오기 -->
+	<select id="selectUserList" resultType="User"> 
+		SELECT	u_id as username,
+				u_name as uName,
+				u_datetime as uDateTime 
+		FROM	tn_user
+	</select>
+	
 	<!-- 회원 등록 -->
    <insert id="createUser" parameterType="User">
       INSERT INTO tn_user (

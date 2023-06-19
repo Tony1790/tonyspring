@@ -9,8 +9,9 @@ spring:
 
 
 spring:
-  profiles:
-  - local
+  config:
+    activate:
+      on-profile: local
   
   mvc:
     view:
