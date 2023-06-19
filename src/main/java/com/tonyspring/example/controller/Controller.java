@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.tonyspring.example.domain.Board;
 import com.tonyspring.example.domain.User;
 import com.tonyspring.example.service.BoardService;
@@ -90,6 +92,14 @@ public class Controller {
 	@RequestMapping(value = "/user/info")
 	public String userInfo(Model model) {
 		return "/user_info";
+	}
+	
+	
+	@RequestMapping(value = "/user/detail")
+	public String userDetail(@RequestParam String username, Model model) {
+		User user = userservice.readUser(username);
+		model.addAttribute("user", user);
+		return "/user_detail";
 	}
 
 	@RequestMapping(value = "/denied")

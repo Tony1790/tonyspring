@@ -18,7 +18,9 @@
 	      	</tr>
 	      	<c:forEach var="userList" items="${userList }">
 		      	<tr>
-		      		<td>${userList.username }</td>
+		      		<td>
+		      			<a href="/user/detail?username=${userList.username }">${userList.username }</a>
+		      		</td>
 		      		<td>${userList.uName }</td>
 		      		<td>${userList.uDateTime }</td>
 		      	</tr>
