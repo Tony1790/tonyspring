@@ -49,4 +49,9 @@ public class UserServiceImpl implements UserService {
 	   public List<User> selectUserList() {
 		   return userMapper.selectUserList();
 	   }
+	   
+	   @Override
+	   public void editUser(User user) {
+		   userMapper.editUser(user);
+	   }
 }

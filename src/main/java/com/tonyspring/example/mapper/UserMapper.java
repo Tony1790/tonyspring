@@ -22,4 +22,7 @@ public interface UserMapper {
 	   
 	   //유저리스트 가져오기
 	   public List<User> selectUserList();
+	   
+		/* 회원 정보 수정 */
+	   public void editUser(User user);
 }

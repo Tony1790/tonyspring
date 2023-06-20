@@ -60,4 +60,12 @@
          UPDATE
             u_id = #{username}
     </insert>
+    
+    <!-- 유저 정보 수정 -->
+    <update id="editUser" parameterType="User">
+    	UPDATE		tn_user 
+    	SET			u_name = #{uName},
+    				u_password = #{password} 
+    	WHERE		u_id = #{username} 
+    </update>
 </mapper>

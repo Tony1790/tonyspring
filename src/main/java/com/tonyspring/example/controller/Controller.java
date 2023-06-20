@@ -60,7 +60,7 @@ public class Controller {
 		user.setAccountNonLocked(true);
 		user.setCredentialsNonExpired(true);
 		user.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));
-
+		
 		// 유저 생성
 		userservice.createUser(user);
 		// 유저 권한 생성
@@ -102,6 +102,30 @@ public class Controller {
 		return "/user_detail";
 	}
 
+	@RequestMapping(value="/user/before_edit")
+	public String userBeforeEdit(@RequestParam String username, Model model) {
+		User user = userservice.readUser(username);
+		model.addAttribute("user", user);
+		return "/before_edit";
+	}
+	
+	@RequestMapping(value="/user/edit")
+	public String userEdit(User user) {
+		// 비밀번호 암호화
+		String encodedPassword = encoder.encode(user.getPassword());
+		
+		// 유저 생성
+		user.setPassword(encodedPassword);
+		user.setUsername(user.getUsername());
+		user.setuName(user.getuName());
+		
+		//유저 정보 수정
+		userservice.editUser(user);
+		
+		return "/user_info";
+	}
+	
+	
 	@RequestMapping(value = "/denied")
 	public String denied(Model model) {
 		return "/denied";

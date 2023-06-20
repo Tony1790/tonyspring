@@ -22,4 +22,7 @@ public interface UserService extends UserDetailsService {
 	   
 	   //유저리스트 가져오기
 	   public List<User> selectUserList();
+	   
+	   //유저 정보 수정
+	   public void editUser(User user);
 }
