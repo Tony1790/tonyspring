@@ -68,4 +68,11 @@
     				u_password = #{password} 
     	WHERE		u_id = #{username} 
     </update>
+    
+    <!-- 유저 삭제 -->
+    <delete id="deleteUser" parameterType="User">
+    	DELETE		tn_user.* 
+    	FROM		tn_user
+    	WHERE		u_id = #{username}
+    </delete>
 </mapper>

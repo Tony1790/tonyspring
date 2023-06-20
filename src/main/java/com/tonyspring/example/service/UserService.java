@@ -25,4 +25,7 @@ public interface UserService extends UserDetailsService {
 	   
 	   //유저 정보 수정
 	   public void editUser(User user);
+	   
+	   //유저 삭제
+	   public void deleteUser(User user);
 }

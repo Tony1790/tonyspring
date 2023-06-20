@@ -121,10 +121,15 @@ public class Controller {
 		
 		//유저 정보 수정
 		userservice.editUser(user);
-		
 		return "/user_info";
 	}
 	
+	@RequestMapping(value="/user/delete")
+	public String deleteUser(User user) {
+		user.setUsername(user.getUsername());
+		userservice.deleteUser(user);
+		return "/user_delete";
+	}
 	
 	@RequestMapping(value = "/denied")
 	public String denied(Model model) {

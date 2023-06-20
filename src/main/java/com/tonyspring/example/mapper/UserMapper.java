@@ -25,4 +25,7 @@ public interface UserMapper {
 	   
 		/* 회원 정보 수정 */
 	   public void editUser(User user);
+	   
+		/* 회원 정보 삭제 */
+	   public void deleteUser(User user);
 }
