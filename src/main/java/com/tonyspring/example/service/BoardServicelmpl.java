@@ -13,4 +13,14 @@ public class BoardServicelmpl implements BoardService {
 	public List<Board> selectBoardList() {
 		return boardmapper.selectBoardList();
 	}
+	
+	@Override
+	public void createBoard(Board board) {
+		boardmapper.createBoard(board);
+	}
+	
+	@Override
+	public Board getBoard(Board board) {
+		return boardmapper.getBoard(board);
+	}
 }

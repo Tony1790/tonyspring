@@ -31,6 +31,7 @@
 			<sec:authorize access="isAuthenticated()">
 				<a href="/user/info">내 정보</a>
 				<a href="/admin">관리자</a>
+				<a href="/board/before-create">게시글 작성하기</a>
 			</sec:authorize>
 		</div>
 	  <table>
@@ -41,13 +42,13 @@
 	      		<td>writer</td>
 	      	</tr>
 	      	<c:forEach var="list" items="${list }">
-		      	<tr>
-		      		<td>${list.bId }</td>
-		      		<td>${list.bTitle }</td>
-		      		<td>${list.bContent }</td>
-		      		<td>${list.bWriter }</td>
-		      		<td>${list.bDateTime }</td>
-		      	</tr>
+					<tr>
+			      		<td>${list.bId }</td>
+			      		<td><a href="/board/detail?bId=${list.bId }">${list.bTitle }</a></td>
+			      		<td><a href="/board/detail?bId=${list.bId }">${list.bContent }</a></td>
+			      		<td>${list.bWriter }</td>
+			      		<td>${list.bDateTime }</td>
+	      			</tr>
 	      	</c:forEach>
       </table>
 </body>

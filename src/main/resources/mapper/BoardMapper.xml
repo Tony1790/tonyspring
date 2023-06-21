@@ -9,4 +9,31 @@
 		                 b_datetime as bDateTime 
 	      FROM           tn_board
 	 </select>
+	 
+	 <insert id="createBoard" parameterType="Board">
+	 	INSERT INTO			tn_board (
+	 	b_title,
+	 	b_content, 
+	 	b_writer
+	 	) VALUES (
+	 	#{bTitle},
+	 	#{bContent},
+	 	#{bWriter}
+	 	)
+	 	
+	 </insert>
+	 
+	 <select id="getBoard" resultType="Board">
+	 	SELECT		b_id as bId,
+	                b_title as bTitle,
+	                b_content as bContent,
+	                b_writer as bWriter,
+	                b_datetime as bDateTime 
+	 	FROM		tn_board
+	 	WHERE		b_id = #{bId}
+	 </select>
 </mapper>
+
+
+
+

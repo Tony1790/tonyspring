@@ -8,6 +8,6 @@
 </head>
 <body>
 	<h1>삭제 완료!</h1>
-	<a href="/">홈으로 돌아가기</a>
+	<a href="/logout">홈으로 돌아가기</a>
 </body>
 </html>

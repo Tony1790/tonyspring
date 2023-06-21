@@ -135,4 +135,34 @@ public class Controller {
 	public String denied(Model model) {
 		return "/denied";
 	}
+	
+	@RequestMapping(value = "/board/before-create")
+	public String boardBeforeCreate(Model model, Principal principal) {
+		Authentication authentication = (Authentication) principal;
+		UserDetails user = (User) authentication.getPrincipal();
+		model.addAttribute("user", user);
+		return "/board/board_before_create";
+	}
+	
+	@RequestMapping(value="/board/create")
+	public String CreateBoard(Model model, Board board) {
+		boardservice.createBoard(board);
+		home(model, null);
+		return "/index";
+	}
+	
+	@RequestMapping(value="/board/detail")
+	public String detailBoard(@RequestParam String bId, Model model, Board board) {
+		board.setbId(Integer.parseInt(bId)); 
+		Board board1 = boardservice.getBoard(board);
+		model.addAttribute("board",board1);
+		return "/board/board_detail";
+	}
 }
+
+
+
+
+
+
+

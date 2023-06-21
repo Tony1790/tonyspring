@@ -7,4 +7,8 @@ import com.tonyspring.example.domain.Board;
 @Mapper
 public interface BoardMapper {
 	public List<Board> selectBoardList();
+	
+	public void createBoard(Board board);
+	
+	public Board getBoard(Board board);
 }
