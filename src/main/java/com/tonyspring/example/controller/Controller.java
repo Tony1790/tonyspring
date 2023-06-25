@@ -2,6 +2,8 @@ package com.tonyspring.example.controller;
 
 import java.security.Principal;
 import java.util.List;
+
+import org.eclipse.jdt.internal.compiler.parser.ParserBasicInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +149,7 @@ public class Controller {
 	@RequestMapping(value="/board/create")
 	public String CreateBoard(Model model, Board board) {
 		boardservice.createBoard(board);
+		boardservice.updateBoard(board);
 		home(model, null);
 		return "/index";
 	}
@@ -158,6 +161,50 @@ public class Controller {
 		model.addAttribute("board",board1);
 		return "/board/board_detail";
 	}
+	
+	@RequestMapping(value="/board/before-edit")
+	public String beforeEditBoard(@RequestParam String bId, Model model, Board board) {
+		board.setbId(Integer.parseInt(bId));
+		Board board1 = boardservice.getBoard(board);
+		model.addAttribute("board",board1);
+		return "/board/board_edit";
+	}
+	
+	
+	@RequestMapping(value = "/board/edit")
+	public String editBoard(@RequestParam String bId, Board board, Model model) {
+		board.setbId(Integer.parseInt(bId));
+		boardservice.editBoard(board);
+		detailBoard(bId, model, board);
+		return "/board/board_detail";
+	}
+	 
+	@RequestMapping(value = "/board/delete")
+	public String deleteBoard(Board board, Model model) {
+		board.setbId(board.getbId());
+		boardservice.deleteBoard(board);
+		home(model, null);
+		return "/index";
+	}
+	
+	@RequestMapping(value = "/board/beforeRecreate")
+	public String beforeRecreateBoard(Board board, Principal principal, Model model) {
+		Authentication authentication = (Authentication) principal;
+		UserDetails user = (User) authentication.getPrincipal();
+		Board board1 = boardservice.getBoard(board);
+		model.addAttribute("user",user);
+		model.addAttribute("board",board1);
+		return "/board/before-recreate";
+	}
+	
+	@RequestMapping(value = "/board/recreate")
+	public String recreateBoard(Board board, Model model) {
+		boardservice.createReboard(board);
+		boardservice.updateReboard(board);
+		home(model, null);
+		return "/index";
+	}
+	
 }
 
 

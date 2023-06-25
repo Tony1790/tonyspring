@@ -24,7 +24,17 @@
 		<tr>
 			<td>내용 : ${board.bContent}</td>
 		</tr>
-		
+		<tr>
+			<td class="edit_td_btn">
+				<a class="edit_btn" href="/board/before-edit?bId=${board.bId}">수정</a>
+			</td>
+			<td class="delete_td_btn">
+				<a class="delete_btn" href="/board/delete?bId=${board.bId}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+			</td>
+			<td class="re_content_btn">
+				<a class="re_content_btn" href="/board/beforeRecreate?bId=${board.bId}">답글</a>
+			</td>
+		</tr>
 	</table>
 </body>
 </html>

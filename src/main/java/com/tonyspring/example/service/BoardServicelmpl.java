@@ -20,7 +20,32 @@ public class BoardServicelmpl implements BoardService {
 	}
 	
 	@Override
+	public void updateBoard(Board board) {
+		boardmapper.updateBoard(board);
+	}
+	
+	@Override
 	public Board getBoard(Board board) {
 		return boardmapper.getBoard(board);
+	}
+	
+	@Override
+	public void editBoard(Board board) {
+		boardmapper.editBoard(board);
+	}
+	
+	@Override
+	public void deleteBoard(Board board) {
+		boardmapper.deleteBoard(board);
+	}
+	
+	@Override
+	public void createReboard(Board board) {
+		boardmapper.createReboard(board);
+	}
+	
+	@Override
+	public void updateReboard(Board board) {
+		boardmapper.updateReboard(board);
 	}
 }

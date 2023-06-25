@@ -10,28 +10,76 @@
 	      FROM           tn_board
 	 </select>
 	 
-	 <insert id="createBoard" parameterType="Board">
-	 	INSERT INTO			tn_board (
-	 	b_title,
-	 	b_content, 
-	 	b_writer
-	 	) VALUES (
-	 	#{bTitle},
-	 	#{bContent},
-	 	#{bWriter}
-	 	)
-	 	
-	 </insert>
+	<insert id="createBoard" parameterType="Board">
+			INSERT INTO tn_board (
+			b_title,
+			b_content,
+			b_writer
+			) VALUES (
+			#{bTitle}, 
+			#{bContent}, 
+			#{bWriter} 
+			) 
+	</insert>
+	 
+	 <update id="updateBoard" parameterType="Board">
+			UPDATE tn_board 
+			SET b_group = LAST_INSERT_ID()  
+			WHERE b_id = LAST_INSERT_ID()	
+	 </update>
 	 
 	 <select id="getBoard" resultType="Board">
 	 	SELECT		b_id as bId,
 	                b_title as bTitle,
 	                b_content as bContent,
 	                b_writer as bWriter,
-	                b_datetime as bDateTime 
+	                b_datetime as bDateTime, 
+	                b_group as bGroup, 
+	                b_order as bOrder,
+	                b_depth as bDepth 
 	 	FROM		tn_board
 	 	WHERE		b_id = #{bId}
 	 </select>
+	 
+	 <update id="editBoard" parameterType="Board">
+	 	UPDATE		tn_board 
+	 	SET			b_title = #{bTitle},
+	 				b_content = #{bContent} 
+	 	WHERE		b_id = #{bId}
+	 </update>
+	 
+	 <delete id="deleteBoard" parameterType="Board">
+	 	DELETE		tn_board.* 
+	 	FROM		tn_board 
+	 	WHERE		b_id = #{bId} 
+	 </delete>
+	 
+	 <insert id="createReboard" parameterType="Board">
+	 	INSERT INTO		tn_board (
+	 	b_title, 
+	 	b_content, 
+	 	b_writer, 
+	 	b_group, 
+	 	b_order, 
+	 	b_depth 
+	 	) VALUES (
+	 	#{bTitle}, 
+	 	#{bContent},
+	 	#{bWriter}, 
+	 	#{bId},
+	 	#{bOrder} + 1,
+	 	#{bDepth} + 1
+	 	);
+	 	
+	 </insert>
+	 
+	 <update id="updateReboard" parameterType="Board">
+			 	UPDATE		tn_board 
+	 			SET			b_order = b_order + 1
+	 			WHERE		b_order >= #{bOrder}
+	 						AND b_id != (SELECT LAST_INSERT_ID()) 
+	 						AND b_group = #{bGroup}
+	 </update>
 </mapper>
 
 
