@@ -187,7 +187,7 @@ public class Controller {
 		return "/index";
 	}
 	
-	@RequestMapping(value = "/board/beforeRecreate")
+	@RequestMapping(value = "/board/beforeRecreate") 
 	public String beforeRecreateBoard(Board board, Principal principal, Model model) {
 		Authentication authentication = (Authentication) principal;
 		UserDetails user = (User) authentication.getPrincipal();

@@ -77,7 +77,7 @@
 			 	UPDATE		tn_board 
 	 			SET			b_order = b_order + 1
 	 			WHERE		b_order >= #{bOrder}
-	 						AND b_id != (SELECT LAST_INSERT_ID()) 
+	 						AND b_id != LAST_INSERT_ID() 
 	 						AND b_group = #{bGroup}
 	 </update>
 </mapper>
