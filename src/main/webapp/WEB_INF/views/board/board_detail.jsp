@@ -78,15 +78,19 @@
 		</div>
 	</div>
 	<script>
+		/* 답글 버튼을 눌러 댓글작성창을 토글하는 코드 */
 		$(document).on('click', ".recmt-generate-btn", function() {
 			$(this).siblings('.recmt-generater').toggle();
 		});
 		
+		/* 취소 버튼을 눌러 댓글 작성창을 숨기는 코드 */
 		$(document).on('click', ".recmt-cancel-btn", function() {
 			$(this).parent('.recmt-generater').css('display', 'none');
 		});
 		
-		
+		$(document).on('click', 'recmt-edit-btn', function() {
+			
+		})
 		
 		$(document).on('click', '.cmt_submit_btn', function() {
 			let bId = $(this).attr('bId');
