@@ -14,6 +14,14 @@
 					<div>
 						<span>${comment.c_date}</span>
 					</div>
+					<button class="recmt-generate-btn">답글</button>
+					<button class="recmt-edit-btn">수정</button>
+					<button class="recmt-delete-btn">삭제</button>
+					<div class="recmt-generater" style="display : none">
+						<textarea rows="2" cols="80"></textarea>
+						<button type="button" class="recmt-submit-btn">등록</button>
+						<button type="button" class="recmt-cancel-btn">취소</button>
+					</div>
 				</li>
 			</c:forEach>
 		</ul>
