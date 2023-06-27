@@ -46,19 +46,49 @@
 			</div>
 			<div class="cmt_list">
 				<ul>
-
+					<c:forEach items="${commentList}" var="comment">
+						<li>
+							<div>
+								<span>${comment.c_writer}</span>
+							</div>
+							<div>
+								<span>${comment.c_content}</span>
+							</div>
+							<div>
+								<span>${comment.c_date}</span>
+							</div>
+						</li>
+					</c:forEach>
 				</ul>
 			</div>
 		</div>
-		<form action="/comment/create" method="post">
-			<div class="cmt_editor">
-				<textarea rows="5" cols="25" name=c_content
-					placeholder="댓글을 입력하세요" wrap="soft" required></textarea>
-				<input type="hidden" name="b_id" value="${board.bId}" />
-				<input type="hidden" name="c_writer" value="${principal.username}">
-				<button type="submit" class="cmt_submit_btn">작성</button>
-			</div>
-		</form>
+		<div class="cmt_editor">
+			<textarea rows="5" cols="25" name=c_content
+				placeholder="댓글을 입력하세요" wrap="soft" required></textarea>
+			<input type="hidden" name="b_id" value="${board.bId}" />
+			<button type="submit" class="cmt_submit_btn" bId="${board.bId}">작성</button>
+		</div>
 	</div>
+	<script>
+	
+		$(document).on('click', '.cmt_submit_btn', function() {
+			let bId = $(this).attr('bId');
+			let cContent = $(this).closest('.cmt_editor').find('textarea').val();
+			
+			$.ajax({
+				method : "POST",
+				url : "/comment/create",
+				data: {
+					b_id : bId,
+					c_content : cContent,
+				}
+			})
+			.done(function(msg) {
+				console.log("msg : " + msg);
+				$('.cmt_list').html(msg);
+				$(document).on('.cmt_editor').find('textarea').val('');
+			});
+		});
+	</script>
 </body>
 </html>
