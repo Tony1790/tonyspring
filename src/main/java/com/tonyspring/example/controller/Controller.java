@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tonyspring.example.domain.*;
 import com.tonyspring.example.service.*;
@@ -208,9 +209,9 @@ public class Controller {
 		UserDetails user = (User) authentication.getPrincipal();
 		comment.setC_writer(user.getUsername());
 		commentservice.createComment(comment);
-		return "/";
-		//ajax로 댓글 리스트를 쏴야함. 대댓글, 댓글 작성 전부 댓글리스트만 쏠 수 있게 하는 방법?
-		//댓글리스트를 ajax로 변화시키게 하는게 관건.
+		return "Hello, world!";
+		//return으로 jsp조각에 comment를 쏴주고, 그 jsp조각을 detail파일에 ajax로 쏴야함.
+		//responsebody는 쓸 필요가 없다.
 	}
 }
 
