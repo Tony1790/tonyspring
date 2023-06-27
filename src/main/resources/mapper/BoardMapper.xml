@@ -8,6 +8,7 @@
 		                 b_writer as bWriter,
 		                 b_datetime as bDateTime 
 	      FROM           tn_board
+	      ORDER BY		 b_group DESC, b_order ASC
 	 </select>
 	 
 	<insert id="createBoard" parameterType="Board">
@@ -66,18 +67,24 @@
 	 	#{bTitle}, 
 	 	#{bContent},
 	 	#{bWriter}, 
-	 	#{bId},
-	 	#{bOrder} + 1,
+	 	#{bGroup},
+	 	#{bOrder},
 	 	#{bDepth} + 1
 	 	);
+	 	
+ 		
 	 	
 	 </insert>
 	 
 	 <update id="updateReboard" parameterType="Board">
+	 	<selectKey keyProperty="bId" keyColumn="b_id" resultType="Integer">
+   		     SELECT LAST_INSERT_ID()
+   		</selectKey>
+	 
 			 	UPDATE		tn_board 
-	 			SET			b_order = b_order + 1
+	 			SET			b_order = b_order + 1 
 	 			WHERE		b_order >= #{bOrder}
-	 						AND b_id != LAST_INSERT_ID() 
+	 						AND b_id != #{bId}  
 	 						AND b_group = #{bGroup}
 	 </update>
 </mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tonyspring.example.mapper.CommentMapper">
+	<insert id="createComment" parameterType="Comment">
+		INSERT INTO tn_comment (
+		c_content,
+		c_writer,
+		b_id
+		)
+		VALUES (
+		#{c_content},
+		#{c_writer},
+		#{b_id}
+		)
+		<selectKey keyProperty="c_id" resultType="Integer" order="AFTER">
+   		     SELECT LAST_INSERT_ID()
+   		</selectKey>
+	</insert>
+	<update id="updateComment" parameterType="Comment">
+		UPDATE		tn_Comment
+		SET			c_group = c_id
+		WHERE		c_id = #{c_id}
+	</update>
+</mapper>

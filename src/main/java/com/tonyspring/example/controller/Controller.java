@@ -3,7 +3,6 @@ package com.tonyspring.example.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.eclipse.jdt.internal.compiler.parser.ParserBasicInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.tonyspring.example.domain.Board;
-import com.tonyspring.example.domain.User;
-import com.tonyspring.example.service.BoardService;
-import com.tonyspring.example.service.UserService;
+import com.tonyspring.example.domain.*;
+import com.tonyspring.example.service.*;
 
 @org.springframework.stereotype.Controller
 public class Controller {
@@ -30,6 +27,8 @@ public class Controller {
 	BoardService boardservice;
 	@Autowired
 	UserService userservice;
+	@Autowired
+	CommentService commentservice;
 	@Autowired
 	PasswordEncoder encoder;
 
@@ -149,7 +148,6 @@ public class Controller {
 	@RequestMapping(value="/board/create")
 	public String CreateBoard(Model model, Board board) {
 		boardservice.createBoard(board);
-		boardservice.updateBoard(board);
 		home(model, null);
 		return "/index";
 	}
@@ -200,11 +198,20 @@ public class Controller {
 	@RequestMapping(value = "/board/recreate")
 	public String recreateBoard(Board board, Model model) {
 		boardservice.createReboard(board);
-		boardservice.updateReboard(board);
 		home(model, null);
 		return "/index";
 	}
 	
+	@RequestMapping(value = "/comment/create")
+	public String createComment(Comment comment, Principal principal) {
+		Authentication authentication = (Authentication) principal;
+		UserDetails user = (User) authentication.getPrincipal();
+		comment.setC_writer(user.getUsername());
+		commentservice.createComment(comment);
+		return "/";
+		//ajax로 댓글 리스트를 쏴야함. 대댓글, 댓글 작성 전부 댓글리스트만 쏠 수 있게 하는 방법?
+		//댓글리스트를 ajax로 변화시키게 하는게 관건.
+	}
 }
 
 

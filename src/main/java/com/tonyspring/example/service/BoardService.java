@@ -8,8 +8,6 @@ public interface BoardService {
 	
 	public void createBoard(Board board);
 	
-	public void updateBoard(Board board);
-	
 	public Board getBoard(Board board);
 	
 	public void editBoard(Board board);
@@ -18,5 +16,4 @@ public interface BoardService {
 	
 	public void createReboard(Board board);
 	
-	public void updateReboard(Board board);
 }

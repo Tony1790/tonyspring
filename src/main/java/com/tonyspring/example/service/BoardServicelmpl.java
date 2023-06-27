@@ -17,12 +17,9 @@ public class BoardServicelmpl implements BoardService {
 	@Override
 	public void createBoard(Board board) {
 		boardmapper.createBoard(board);
-	}
-	
-	@Override
-	public void updateBoard(Board board) {
 		boardmapper.updateBoard(board);
 	}
+	
 	
 	@Override
 	public Board getBoard(Board board) {
@@ -42,10 +39,6 @@ public class BoardServicelmpl implements BoardService {
 	@Override
 	public void createReboard(Board board) {
 		boardmapper.createReboard(board);
-	}
-	
-	@Override
-	public void updateReboard(Board board) {
 		boardmapper.updateReboard(board);
 	}
 }
