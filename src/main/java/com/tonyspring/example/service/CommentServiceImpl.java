@@ -35,6 +35,6 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public void createRecomment(Comment comment) {
 		commentMapper.createRecomment(comment);
-		//commentMapper.updateRecomment(comment);
+		commentMapper.updateRecomment(comment);
 	}
 }

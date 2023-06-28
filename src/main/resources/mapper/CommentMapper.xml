@@ -55,12 +55,19 @@
 		#{c_writer},
 		#{c_group},
 		#{b_id},
-		#{c_order} + 1,
+		#{c_order},
 		#{c_depth} + 1
 		)
 	</insert>
 	
-	<!-- <update id="updateRecomment">
-	
-	</update> -->
+	<update id="updateRecomment">
+		<selectKey keyProperty="c_id" keyColumn="c_id" resultType="Integer">
+			SELECT	LAST_INSERT_ID()
+		</selectKey>
+		UPDATE		tn_comment
+		SET			c_order = c_order + 1
+		WHERE		c_order >= #{c_order}
+					AND	c_id != #{c_id}
+					AND c_group = #{c_group}
+	</update>
 </mapper>
