@@ -16,4 +16,9 @@ public class CommentServiceImpl implements CommentService {
 		commentMapper.createComment(comment);
 		commentMapper.updateComment(comment);
 	}
+	
+	@Override
+	public List<Comment> readComments(Comment comment) {
+		return commentMapper.readComments(comment);
+	}
 }

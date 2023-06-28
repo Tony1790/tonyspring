@@ -154,9 +154,12 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/board/detail")
-	public String detailBoard(@RequestParam String bId, Model model, Board board) {
-		board.setbId(Integer.parseInt(bId)); 
+	public String detailBoard(Model model, Board board, Comment comment) {
+		//board.setbId(Integer.parseInt(bId)); 
 		Board board1 = boardservice.getBoard(board);
+		comment.setB_id(board.getbId());
+		List<Comment> commentList = commentservice.readComments(comment);
+		model.addAttribute("commentList",commentList);
 		model.addAttribute("board",board1);
 		return "/board/board_detail";
 	}
@@ -171,10 +174,10 @@ public class Controller {
 	
 	
 	@RequestMapping(value = "/board/edit")
-	public String editBoard(@RequestParam String bId, Board board, Model model) {
+	public String editBoard(@RequestParam String bId, Board board, Model model, Comment comment) {
 		board.setbId(Integer.parseInt(bId));
 		boardservice.editBoard(board);
-		detailBoard(bId, model, board);
+		detailBoard(model, board, comment);
 		return "/board/board_detail";
 	}
 	 
@@ -204,14 +207,24 @@ public class Controller {
 	}
 	
 	@RequestMapping(value = "/comment/create")
-	public String createComment(Comment comment, Principal principal) {
+	public String createComment(Model model ,Comment comment, Principal principal) {
 		Authentication authentication = (Authentication) principal;
 		UserDetails user = (User) authentication.getPrincipal();
 		comment.setC_writer(user.getUsername());
 		commentservice.createComment(comment);
-		return "Hello, world!";
+		List<Comment> commentList = commentservice.readComments(comment);
+		model.addAttribute("commentList",commentList);
+		return "/comment/comment-list";
 		//return으로 jsp조각에 comment를 쏴주고, 그 jsp조각을 detail파일에 ajax로 쏴야함.
 		//responsebody는 쓸 필요가 없다.
+	}
+	
+	@RequestMapping(value="/comment/test")
+	public String test(Comment comment, Principal principal) {
+		Authentication authentication = (Authentication) principal;
+		UserDetails user = (User) authentication.getPrincipal();
+		comment.setC_writer(user.getUsername());
+		return "/";
 	}
 }
 

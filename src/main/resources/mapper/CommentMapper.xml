@@ -21,4 +21,11 @@
 		SET			c_group = c_id
 		WHERE		c_id = #{c_id}
 	</update>
+	
+	<select id="readComments">
+		SELECT		tn_comment.*
+		FROM		tn_comment
+		WHERE		b_id = #{b_id}
+		ORDER BY	c_group, c_order ASC
+	</select>
 </mapper>

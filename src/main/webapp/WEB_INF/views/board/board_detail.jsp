@@ -46,19 +46,70 @@
 			</div>
 			<div class="cmt_list">
 				<ul>
-
+					<c:forEach items="${commentList}" var="comment">
+						<li>
+							<div>
+								<span>${comment.c_writer}</span>
+							</div>
+							<div>
+								<span>${comment.c_content}</span>
+							</div>
+							<div>
+								<span>${comment.c_date}</span>
+							</div>
+							<button class="recmt-generate-btn">답글</button>
+							<button class="recmt-edit-btn">수정</button>
+							<button class="recmt-delete-btn">삭제</button>
+							<div class="recmt-generater" style="display: none">
+								<textarea rows="2" cols="80"></textarea>
+								<button type="button" class="recmt-submit-btn">등록</button>
+								<button type="button" class="recmt-cancel-btn">취소</button>
+							</div>
+						</li>
+					</c:forEach>
 				</ul>
 			</div>
 		</div>
-		<form action="/comment/create" method="post">
-			<div class="cmt_editor">
-				<textarea rows="5" cols="25" name=c_content
-					placeholder="댓글을 입력하세요" wrap="soft" required></textarea>
-				<input type="hidden" name="b_id" value="${board.bId}" />
-				<input type="hidden" name="c_writer" value="${principal.username}">
-				<button type="submit" class="cmt_submit_btn">작성</button>
-			</div>
-		</form>
+		<div class="cmt_editor">
+			<textarea rows="5" cols="25" name=c_content
+				placeholder="댓글을 입력하세요" wrap="soft" required></textarea>
+			<input type="hidden" name="b_id" value="${board.bId}" />
+			<button type="submit" class="cmt_submit_btn" bId="${board.bId}">작성</button>
+		</div>
 	</div>
+	<script>
+		/* 답글 버튼을 눌러 댓글작성창을 토글하는 코드 */
+		$(document).on('click', ".recmt-generate-btn", function() {
+			$(this).siblings('.recmt-generater').toggle();
+		});
+		
+		/* 취소 버튼을 눌러 댓글 작성창을 숨기는 코드 */
+		$(document).on('click', ".recmt-cancel-btn", function() {
+			$(this).parent('.recmt-generater').css('display', 'none');
+		});
+		
+		$(document).on('click', 'recmt-edit-btn', function() {
+			
+		})
+		
+		$(document).on('click', '.cmt_submit_btn', function() {
+			let bId = $(this).attr('bId');
+			let cContent = $(this).closest('.cmt_editor').find('textarea').val();
+			
+			$.ajax({
+				method : "POST",
+				url : "/comment/create",
+				data: {
+					b_id : bId,
+					c_content : cContent,
+				}
+			})
+			.done(function(msg) {
+				console.log("msg : " + msg);
+				$('.cmt_list').html(msg);
+				$(document).on('.cmt_editor').find('textarea').val('');
+			});
+		});
+	</script>
 </body>
 </html>
