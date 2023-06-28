@@ -78,8 +78,12 @@
 		</div>
 	</div>
 	<script>
+	
+		var isEditing = false; //전역 변수를 false로 초기화
+	
 		/* 답글 버튼을 눌러 댓글작성창을 토글하는 코드 */
 		$(document).on('click', ".recmt-generate-btn", function() {
+			isEditing = false;
 			$(this).siblings('.recmt-generater').toggle();
 		});
 		
@@ -90,6 +94,7 @@
 		
 		/* 수정 버튼을 눌러 댓글작성창을 토글한 후, 백단에서 댓글 정보를 받아와 텍스트를 띄움 */
 		$(document).on('click', '.recmt-edit-btn', function() {
+			isEditing = true;
 			let cId = $(this).attr('c_id');
 			var _this = this;
 			
@@ -115,6 +120,7 @@
 			let bId = $(this).attr('b_id');
 			var _this = this;
 			
+			
 			$.ajax({
 				method : "POST",
 				url : "/recomment/delete",
@@ -127,13 +133,18 @@
 				console.log("msg : " + msg);
 				$('.cmt_list').html(msg);
 			});
+		  
 		});
-		
+
 		/* 답글 -> 등록 버튼을 눌러 대댓글을 다는 기능 구현 */
 		$(document).on('click', '.recmt-submit-btn', function() {
 			let cId = $(this).attr('c_id');
 			let cContent = $(this).siblings('textarea').val();
+			var _this = this;
 			
+			if(isEditing) {
+				//edit 기능 구현하기!!! 백단 앞단 전부 다!!!
+			} else {
 			$.ajax({
 				method : "POST",
 				url : "/recomment/create",
@@ -141,32 +152,35 @@
 					c_id : cId,
 					c_content : cContent
 				}
-			})
-			.done(function(msg) {
+			}).done(function(msg) {
 				console.log("msg : " + msg);
 				$('.cmt_list').html(msg);
 			});
+			}
 		})
-		
+
 		/* 댓글 다는 기능 */
-		$(document).on('click', '.cmt_submit_btn', function() {
-			let bId = $(this).attr('bId');
-			let cContent = $(this).closest('.cmt_editor').find('textarea').val();
-			
-			$.ajax({
-				method : "POST",
-				url : "/comment/create",
-				data: {
-					b_id : bId,
-					c_content : cContent,
-				}
-			})
-			.done(function(msg) {
-				console.log("msg : " + msg);
-				$('.cmt_list').html(msg);
-				$(document).on('.cmt_editor').find('textarea').val('');
-			});
-		});
+		$(document).on(
+				'click',
+				'.cmt_submit_btn',
+				function() {
+					let bId = $(this).attr('bId');
+					let cContent = $(this).closest('.cmt_editor').find(
+							'textarea').val();
+
+					$.ajax({
+						method : "POST",
+						url : "/comment/create",
+						data : {
+							b_id : bId,
+							c_content : cContent,
+						}
+					}).done(function(msg) {
+						console.log("msg : " + msg);
+						$('.cmt_list').html(msg);
+						$(document).on('.cmt_editor').find('textarea').val('');
+					});
+				});
 	</script>
 </body>
 </html>
