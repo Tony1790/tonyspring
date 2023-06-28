@@ -219,12 +219,33 @@ public class Controller {
 		//responsebody는 쓸 필요가 없다.
 	}
 	
-	@RequestMapping(value="/comment/test")
-	public String test(Comment comment, Principal principal) {
+	@ResponseBody
+	@RequestMapping(value="/recomment/edit")
+	public Comment recommentEdit(Comment comment, Model model) {
+		Comment comment1 = commentservice.readComment(comment);
+		//model.addAttribute("comment1", comment1);
+		return comment1;
+	}
+	
+	@RequestMapping(value="/recomment/delete")
+	public String recommentDelete(Comment comment, Model model) {
+		commentservice.deleteComment(comment);
+		List<Comment> commentList = commentservice.readComments(comment);
+		model.addAttribute("commentList",commentList);
+		return "/comment/comment-list";
+	}
+	
+	@RequestMapping(value="/recomment/create")
+	public String recommentCreate(Comment comment, Model model, Principal principal) {
+		Comment comment1 = commentservice.readComment(comment);
 		Authentication authentication = (Authentication) principal;
 		UserDetails user = (User) authentication.getPrincipal();
-		comment.setC_writer(user.getUsername());
-		return "/";
+		comment1.setC_writer(user.getUsername());
+		comment1.setC_content(comment.getC_content());
+		commentservice.createRecomment(comment1);
+		List<Comment> commentList = commentservice.readComments(comment1);
+		model.addAttribute("commentList",commentList);
+		return "/comment/comment-list";
 	}
 }
 

@@ -58,11 +58,11 @@
 								<span>${comment.c_date}</span>
 							</div>
 							<button class="recmt-generate-btn">답글</button>
-							<button class="recmt-edit-btn">수정</button>
-							<button class="recmt-delete-btn">삭제</button>
+							<button class="recmt-edit-btn" c_id = "${comment.c_id}">수정</button>
+							<button class="recmt-delete-btn" c_id = "${comment.c_id}" b_id="${board.bId}">삭제</button>
 							<div class="recmt-generater" style="display: none">
 								<textarea rows="2" cols="80"></textarea>
-								<button type="button" class="recmt-submit-btn">등록</button>
+								<button type="button" class="recmt-submit-btn" c_id = "${comment.c_id}">등록</button>
 								<button type="button" class="recmt-cancel-btn">취소</button>
 							</div>
 						</li>
@@ -88,10 +88,67 @@
 			$(this).parent('.recmt-generater').css('display', 'none');
 		});
 		
-		$(document).on('click', 'recmt-edit-btn', function() {
+		/* 수정 버튼을 눌러 댓글작성창을 토글한 후, 백단에서 댓글 정보를 받아와 텍스트를 띄움 */
+		$(document).on('click', '.recmt-edit-btn', function() {
+			let cId = $(this).attr('c_id');
+			var _this = this;
 			
+			$.ajax({
+				method : "POST",
+				url : "/recomment/edit",
+				data : {
+					'c_id' : cId
+				},
+				success : function(data) {
+					$(_this).siblings('.recmt-generater').toggle();
+					$(_this).siblings('.recmt-generater').find('textarea').val(data.c_content);
+				},
+				error : function(error) {
+					console.log(error);
+				}
+			});
+		});
+		
+		/* 삭제 버튼을 눌러 댓글을 삭제한 후 새롭게 댓글 리스트를 받아와서 보냄 */
+		$(document).on('click', '.recmt-delete-btn', function() {
+			let cId = $(this).attr('c_id');
+			let bId = $(this).attr('b_id');
+			var _this = this;
+			
+			$.ajax({
+				method : "POST",
+				url : "/recomment/delete",
+				data: {
+					c_id : cId,
+					b_id : bId
+				},
+			})
+			.done(function(msg) {
+				console.log("msg : " + msg);
+				$('.cmt_list').html(msg);
+			});
+		});
+		
+		/* 답글 -> 등록 버튼을 눌러 대댓글을 다는 기능 구현 */
+		$(document).on('click', '.recmt-submit-btn', function() {
+			let cId = $(this).attr('c_id');
+			let cContent = $(this).siblings('textarea').val();
+			
+			$.ajax({
+				method : "POST",
+				url : "/recomment/create",
+				data : {
+					c_id : cId,
+					c_content : cContent
+				}
+			})
+			.done(function(msg) {
+				console.log("msg : " + msg);
+				$('.cmt_list').html(msg);
+			});
 		})
 		
+		/* 댓글 다는 기능 */
 		$(document).on('click', '.cmt_submit_btn', function() {
 			let bId = $(this).attr('bId');
 			let cContent = $(this).closest('.cmt_editor').find('textarea').val();

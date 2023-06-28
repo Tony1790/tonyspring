@@ -11,4 +11,8 @@ public interface CommentMapper {
 	public void createComment(Comment comment);
 	public void updateComment(Comment comment);
 	public List<Comment> readComments(Comment comment);
+	public Comment readComment(Comment comment);
+	public void deleteComment(Comment comment);
+	public void createRecomment(Comment comment);
+	public void updateRecomment(Comment comment);
 }

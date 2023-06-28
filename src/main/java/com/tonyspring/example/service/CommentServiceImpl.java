@@ -21,4 +21,20 @@ public class CommentServiceImpl implements CommentService {
 	public List<Comment> readComments(Comment comment) {
 		return commentMapper.readComments(comment);
 	}
+	
+	@Override
+	public Comment readComment(Comment comment) {
+		return commentMapper.readComment(comment);
+	}
+	
+	@Override
+	public void deleteComment(Comment comment) {
+		commentMapper.deleteComment(comment);
+	}
+	
+	@Override
+	public void createRecomment(Comment comment) {
+		commentMapper.createRecomment(comment);
+		//commentMapper.updateRecomment(comment);
+	}
 }

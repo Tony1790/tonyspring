@@ -12,6 +12,7 @@
 		#{c_writer},
 		#{b_id}
 		)
+		
 		<selectKey keyProperty="c_id" resultType="Integer" order="AFTER">
    		     SELECT LAST_INSERT_ID()
    		</selectKey>
@@ -28,4 +29,38 @@
 		WHERE		b_id = #{b_id}
 		ORDER BY	c_group, c_order ASC
 	</select>
+	
+	<select id="readComment" >
+		SELECT		tn_comment.*
+		FROM		tn_comment
+		WHERE		c_id = #{c_id}
+	</select>
+	
+	<delete id="deleteComment">
+		DELETE		tn_comment.*
+		FROM		tn_comment
+		WHERE		c_id = #{c_id}
+	</delete>
+	
+	<insert id="createRecomment">
+		INSERT INTO tn_comment (
+		c_content,
+		c_writer,
+		c_group,
+		b_id,
+		c_order,
+		c_depth
+		) VALUES (
+		#{c_content},
+		#{c_writer},
+		#{c_group},
+		#{b_id},
+		#{c_order} + 1,
+		#{c_depth} + 1
+		)
+	</insert>
+	
+	<!-- <update id="updateRecomment">
+	
+	</update> -->
 </mapper>

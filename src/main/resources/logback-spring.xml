@@ -21,14 +21,14 @@
 <!-- 설정한 로그 등록  -->
    
    <!-- mapper 패키지  -->   
-   <logger name="com.lcomputerstudy.example.mapper" level="TRACE" additivity="false">
+   <logger name="com.tonyspring.example.mapper.CommentMapper" level="TRACE" additivity="false">
       <appender-ref ref="FILE" />
       <appender-ref ref="STDOUT" />
    </logger>
    <!-- // mapper 패키지  -->
    
    
-   <logger name="com.lcomputerstudy.example" level="DEBUG" additivity="false">
+   <logger name="com.tonyspring.example" level="DEBUG" additivity="false">
       <appender-ref ref="FILE" />
       <appender-ref ref="STDOUT" />
    </logger>
