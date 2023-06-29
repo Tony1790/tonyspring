@@ -85,6 +85,7 @@
 		$(document).on('click', ".recmt-generate-btn", function() {
 			isEditing = false;
 			$(this).siblings('.recmt-generater').toggle();
+			$(this).siblings('.recmt-generater').find('.recmt-submit-btn').text('등록');
 		});
 		
 		/* 취소 버튼을 눌러 댓글 작성창을 숨기는 코드 */
@@ -107,6 +108,7 @@
 				success : function(data) {
 					$(_this).siblings('.recmt-generater').toggle();
 					$(_this).siblings('.recmt-generater').find('textarea').val(data.c_content);
+					$(_this).siblings('.recmt-generater').find('.recmt-submit-btn').text('수정');
 				},
 				error : function(error) {
 					console.log(error);
@@ -136,14 +138,24 @@
 		  
 		});
 
-		/* 답글 -> 등록 버튼을 눌러 대댓글을 다는 기능 구현 */
+		/* 답글 -> 등록 버튼을 눌러 대댓글, 또는 수정하는 기능 구현 */
 		$(document).on('click', '.recmt-submit-btn', function() {
 			let cId = $(this).attr('c_id');
 			let cContent = $(this).siblings('textarea').val();
-			var _this = this;
 			
 			if(isEditing) {
 				//edit 기능 구현하기!!! 백단 앞단 전부 다!!!
+				$.ajax({
+					method : "POST",
+					url : "/comment/edit",
+					data : {
+						c_id : cId,
+						c_content : cContent
+					}
+				})
+				.done(function(msg) {
+					$('.cmt_list').html(msg);
+				})
 			} else {
 			$.ajax({
 				method : "POST",

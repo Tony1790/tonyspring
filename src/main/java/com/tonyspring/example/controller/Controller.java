@@ -247,6 +247,19 @@ public class Controller {
 		model.addAttribute("commentList",commentList);
 		return "/comment/comment-list";
 	}
+	
+	@RequestMapping(value = "/comment/edit")
+	public String commentEdit(Comment comment, Model model) {
+		Comment comment1 = commentservice.editComment(comment);
+		List<Comment> commentList = commentservice.readComments(comment1);
+		model.addAttribute("commentList",commentList);
+		return "/comment/comment-list";
+	}
+	
+	@RequestMapping(value = "/search")
+	public String search(Model model) {
+		return "/";
+	}
 }
 
 

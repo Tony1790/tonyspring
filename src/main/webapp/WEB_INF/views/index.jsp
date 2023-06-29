@@ -26,6 +26,16 @@
 				Spring Security를 사용하는 경우, principal은 보통 UserDetails 객체를 참조하게 됩니다. 
 				UserDetails는 사용자의 유저네임, 패스워드, 권한 정보 등을 포함하고 있습니다. -->
 			</sec:authorize>
+			<form action="/search" method="get" class="search_form">
+				<select name="search_option" class="search_option">
+					<option value="empty">검색</option>
+					<option value="title">제목</option>
+					<option value="content">내용</option>
+					<option value="both">제목+내용</option>
+					<option value="writer">작성자</option>
+				</select> <input type="text" name="keyword" class="search_keyword" size=10></input>
+				<button type=submit class="search_btn">검색</button>
+			</form>
 		</div>
 		<div>
 			<sec:authorize access="isAuthenticated()">

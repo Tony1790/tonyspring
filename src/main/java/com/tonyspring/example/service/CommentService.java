@@ -14,4 +14,6 @@ public interface CommentService {
 	public void deleteComment(Comment comment);
 	
 	public void createRecomment(Comment comment);
+	
+	public Comment editComment(Comment comment);
 }

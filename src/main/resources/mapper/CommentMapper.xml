@@ -70,4 +70,10 @@
 					AND	c_id != #{c_id}
 					AND c_group = #{c_group}
 	</update>
+	
+	<update id="editComment">
+		UPDATE		tn_comment
+		SET			c_content = #{c_content}
+		WHERE		c_id = #{c_id}		
+	</update>
 </mapper>

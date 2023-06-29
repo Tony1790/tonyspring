@@ -15,4 +15,5 @@ public interface CommentMapper {
 	public void deleteComment(Comment comment);
 	public void createRecomment(Comment comment);
 	public void updateRecomment(Comment comment);
+	public void editComment(Comment comment);
 }

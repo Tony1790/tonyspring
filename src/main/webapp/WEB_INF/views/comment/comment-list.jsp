@@ -17,7 +17,7 @@
 						<button class="recmt-generate-btn">답글</button>
 						<button class="recmt-edit-btn" c_id="${comment.c_id}">수정</button>
 						<button class="recmt-delete-btn" c_id="${comment.c_id}"
-							b_id="${board.bId}">삭제</button>
+							b_id="${comment.b_id}">삭제</button>
 						<div class="recmt-generater" style="display: none">
 							<textarea rows="2" cols="80"></textarea>
 							<button type="button" class="recmt-submit-btn"
