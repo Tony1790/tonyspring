@@ -63,22 +63,5 @@
 	      			</tr>
 	      	</c:forEach>
       </table>
-      <script>
-      	/* $(document).on('click', '.search_btn', function(){
-      		let category = $(this).siblings('.search_option').val();
-      		let keyword = $(this).siblings('.search_keyword').val();
-      		console.log(category);
-      		      		
-      		$.ajax ({
-      			method : "POST",
-      			url : "/search"
-      			data : {
-      				category : category,
-      				keyword : keyword
-      			}
-      		})
-      		.done
-      	}) */
-      </script>
 </body>
 </html>
