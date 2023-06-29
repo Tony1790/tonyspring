@@ -87,6 +87,31 @@
 	 						AND b_id != #{bId}  
 	 						AND b_group = #{bGroup}
 	 </update>
+	 
+	 <select id="searchBoard" resultType="Board">
+	 	SELECT		b_id as bId,
+	                b_title as bTitle,
+	                b_content as bContent,
+	                b_writer as bWriter,
+	                b_datetime as bDateTime
+	 	FROM		tn_board
+	 	<choose>
+	 		<when test="category != null and category.equals('title')">
+				WHERE	b_title	LIKE CONCAT('%', #{keyword}, '%')			
+	 		</when>
+	 		<when test="category != null and category.equals('content')">
+				WHERE	b_content	LIKE CONCAT('%', #{keyword}, '%')			
+	 		</when>
+	 		<when test="category != null and category.equals('both')">
+				WHERE	b_content	LIKE CONCAT('%', #{keyword}, '%') 
+						OR b_title	LIKE CONCAT('%', #{keyword}, '%') 			
+	 		</when>
+	 		<when test="category != null and category.equals('writer')">
+				WHERE	b_writer = #{keyword}			
+	 		</when>
+	 	</choose>
+	 	ORDER BY		 b_group DESC, b_order ASC
+	 </select>
 </mapper>
 
 

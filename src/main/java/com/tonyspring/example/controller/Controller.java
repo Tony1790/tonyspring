@@ -257,8 +257,10 @@ public class Controller {
 	}
 	
 	@RequestMapping(value = "/search")
-	public String search(Model model) {
-		return "/";
+	public String search(Search search, Model model) {
+		List<Board> list = boardservice.searchBoard(search);
+		model.addAttribute("list", list);
+		return "/index";
 	}
 }
 

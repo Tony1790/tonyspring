@@ -3,6 +3,7 @@ package com.tonyspring.example.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.tonyspring.example.domain.Board;
+import com.tonyspring.example.domain.Search;
 
 @Mapper
 public interface BoardMapper {
@@ -21,4 +22,6 @@ public interface BoardMapper {
 	public void createReboard(Board board);
 	
 	public void updateReboard(Board board);
+	
+	public List<Board> searchBoard(Search search);
 }
