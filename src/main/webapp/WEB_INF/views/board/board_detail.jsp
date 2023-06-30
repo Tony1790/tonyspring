@@ -8,6 +8,91 @@
 <meta charset="UTF-8">
 <title>게시글 상세페이지</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	padding: 20px;
+	background-color: #f5f5f5;
+}
+
+h1 {
+	color: #333;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+table, th, td {
+	border: 1px solid #999;
+	padding: 10px;
+	text-align: left;
+}
+
+.edit_btn, .delete_btn, .re_content_btn {
+	color: #0066cc;
+	text-decoration: none;
+}
+
+.edit_btn:hover, .delete_btn:hover, .re_content_btn:hover {
+	text-decoration: underline;
+}
+
+.cmt_container {
+	margin-top: 30px;
+}
+
+.cmt_box {
+	border: 1px solid #999;
+	padding: 10px;
+}
+
+.cmt_count_box {
+	margin-bottom: 10px;
+}
+
+.cmt_list ul {
+	list-style: none;
+	padding: 0;
+}
+
+.cmt_list li {
+	border: 1px solid #999;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.cmt_list li div {
+	margin-bottom: 5px;
+}
+
+.recmt-generate-btn, .recmt-edit-btn, .recmt-delete-btn {
+	background-color: #0066cc;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.cmt_editor {
+	margin-top: 20px;
+}
+
+.cmt_editor textarea {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.cmt_submit_btn {
+	background-color: #0066cc;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+</style>
 </head>
 <body>
 	<h1>게시글 상세페이지</h1>
@@ -77,86 +162,92 @@
 			<button type="submit" class="cmt_submit_btn" bId="${board.bId}">작성</button>
 		</div>
 	</div>
-	<script>
-	
-		var isEditing = false; //전역 변수를 false로 초기화
-	
-		/* 답글 버튼을 눌러 댓글작성창을 토글하는 코드 */
-		$(document).on('click', ".recmt-generate-btn", function() {
-			isEditing = false;
-			$(this).siblings('.recmt-generater').toggle();
-			$(this).siblings('.recmt-generater').find('.recmt-submit-btn').text('등록');
-		});
-		
-		/* 취소 버튼을 눌러 댓글 작성창을 숨기는 코드 */
-		$(document).on('click', ".recmt-cancel-btn", function() {
-			$(this).parent('.recmt-generater').css('display', 'none');
-		});
-		
-		/* 수정 버튼을 눌러 댓글작성창을 토글한 후, 백단에서 댓글 정보를 받아와 텍스트를 띄움 */
-		$(document).on('click', '.recmt-edit-btn', function() {
-			isEditing = true;
-			let cId = $(this).attr('c_id');
-			var _this = this;
-			
-			$.ajax({
-				method : "POST",
-				url : "/recomment/edit",
-				data : {
-					'c_id' : cId
-				},
-				success : function(data) {
-					$(_this).siblings('.recmt-generater').toggle();
-					$(_this).siblings('.recmt-generater').find('textarea').val(data.c_content);
-					$(_this).siblings('.recmt-generater').find('.recmt-submit-btn').text('수정');
-				},
-				error : function(error) {
-					console.log(error);
-				}
-			});
-		});
-		
-		/* 삭제 버튼을 눌러 댓글을 삭제한 후 새롭게 댓글 리스트를 받아와서 보냄 */
-		$(document).on('click', '.recmt-delete-btn', function() {
-			let cId = $(this).attr('c_id');
-			let bId = $(this).attr('b_id');
-			var _this = this;
-			
-			
-			$.ajax({
-				method : "POST",
-				url : "/recomment/delete",
-				data: {
-					c_id : cId,
-					b_id : bId
-				},
-			})
-			.done(function(msg) {
-				console.log("msg : " + msg);
-				$('.cmt_list').html(msg);
-			});
-		  
-		});
+</body>
+<script>
+	var isEditing = false; //전역 변수를 false로 초기화
 
-		/* 답글 -> 등록 버튼을 눌러 대댓글, 또는 수정하는 기능 구현 */
-		$(document).on('click', '.recmt-submit-btn', function() {
-			let cId = $(this).attr('c_id');
-			let cContent = $(this).siblings('textarea').val();
-			
-			if(isEditing) {
-				//edit 기능 구현하기!!! 백단 앞단 전부 다!!!
+	/* 답글 버튼을 눌러 댓글작성창을 토글하는 코드 */
+	$(document).on(
+			'click',
+			".recmt-generate-btn",
+			function() {
+				isEditing = false;
+				$(this).siblings('.recmt-generater').toggle();
+				$(this).siblings('.recmt-generater').find('.recmt-submit-btn')
+						.text('등록');
+			});
+
+	/* 취소 버튼을 눌러 댓글 작성창을 숨기는 코드 */
+	$(document).on('click', ".recmt-cancel-btn", function() {
+		$(this).parent('.recmt-generater').css('display', 'none');
+	});
+
+	/* 수정 버튼을 눌러 댓글작성창을 토글한 후, 백단에서 댓글 정보를 받아와 텍스트를 띄움 */
+	$(document).on(
+			'click',
+			'.recmt-edit-btn',
+			function() {
+				isEditing = true;
+				let cId = $(this).attr('c_id');
+				var _this = this;
+
 				$.ajax({
 					method : "POST",
-					url : "/comment/edit",
+					url : "/recomment/edit",
 					data : {
-						c_id : cId,
-						c_content : cContent
+						'c_id' : cId
+					},
+					success : function(data) {
+						$(_this).siblings('.recmt-generater').toggle();
+						$(_this).siblings('.recmt-generater').find('textarea')
+								.val(data.c_content);
+						$(_this).siblings('.recmt-generater').find(
+								'.recmt-submit-btn').text('수정');
+					},
+					error : function(error) {
+						console.log(error);
 					}
-				})
-				.done(function(msg) {
-					$('.cmt_list').html(msg);
-				})
-			} else {
+				});
+			});
+
+	/* 삭제 버튼을 눌러 댓글을 삭제한 후 새롭게 댓글 리스트를 받아와서 보냄 */
+	$(document).on('click', '.recmt-delete-btn', function() {
+		let cId = $(this).attr('c_id');
+		let bId = $(this).attr('b_id');
+		var _this = this;
+
+		$.ajax({
+			method : "POST",
+			url : "/recomment/delete",
+			data : {
+				c_id : cId,
+				b_id : bId
+			},
+		}).done(function(msg) {
+			console.log("msg : " + msg);
+			$('.cmt_list').html(msg);
+		});
+
+	});
+
+	/* 답글 -> 등록 버튼을 눌러 대댓글, 또는 수정하는 기능 구현 */
+	$(document).on('click', '.recmt-submit-btn', function() {
+		let cId = $(this).attr('c_id');
+		let cContent = $(this).siblings('textarea').val();
+
+		if (isEditing) {
+			//edit 기능 구현하기!!! 백단 앞단 전부 다!!!
+			$.ajax({
+				method : "POST",
+				url : "/comment/edit",
+				data : {
+					c_id : cId,
+					c_content : cContent
+				}
+			}).done(function(msg) {
+				$('.cmt_list').html(msg);
+			})
+		} else {
 			$.ajax({
 				method : "POST",
 				url : "/recomment/create",
@@ -168,31 +259,26 @@
 				console.log("msg : " + msg);
 				$('.cmt_list').html(msg);
 			});
+		}
+	})
+
+	/* 댓글 다는 기능 */
+	$(document).on('click', '.cmt_submit_btn', function() {
+		let bId = $(this).attr('bId');
+		let cContent = $(this).closest('.cmt_editor').find('textarea').val();
+
+		$.ajax({
+			method : "POST",
+			url : "/comment/create",
+			data : {
+				b_id : bId,
+				c_content : cContent,
 			}
-		})
-
-		/* 댓글 다는 기능 */
-		$(document).on(
-				'click',
-				'.cmt_submit_btn',
-				function() {
-					let bId = $(this).attr('bId');
-					let cContent = $(this).closest('.cmt_editor').find(
-							'textarea').val();
-
-					$.ajax({
-						method : "POST",
-						url : "/comment/create",
-						data : {
-							b_id : bId,
-							c_content : cContent,
-						}
-					}).done(function(msg) {
-						console.log("msg : " + msg);
-						$('.cmt_list').html(msg);
-						$(document).on('.cmt_editor').find('textarea').val('');
-					});
-				});
-	</script>
-</body>
+		}).done(function(msg) {
+			console.log("msg : " + msg);
+			$('.cmt_list').html(msg);
+			$(document).on('.cmt_editor').find('textarea').val('');
+		});
+	});
+</script>
 </html>

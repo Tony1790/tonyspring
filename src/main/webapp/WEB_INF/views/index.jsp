@@ -10,6 +10,73 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style>
+	body {
+	  font-family: Arial, sans-serif;
+	  padding: 20px;
+	  background-color: #f5f5f5;
+	}
+	
+	h1 {
+	  color: #333;
+	}
+	
+	hr {
+	  border: 0;
+	  height: 1px;
+	  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+	}
+	
+	a {
+	  color: #0066cc;
+	  text-decoration: none;
+	}
+	
+	a:hover {
+	  text-decoration: underline;
+	}
+	
+	.search_form {
+	  margin: 20px 0;
+	}
+	
+	.search_option,
+	.search_keyword {
+	  margin-right: 10px;
+	}
+	
+	.search_btn {
+	  background-color: #0066cc;
+	  color: #fff;
+	  border: none;
+	  padding: 5px 10px;
+	}
+	
+	table {
+	  width: 100%;
+	  border-collapse: collapse;
+	  margin-top: 20px;
+	}
+	
+	table, th, td {
+	  border: 1px solid #999;
+	  padding: 10px;
+	  text-align: left;
+	}
+	
+	ul {
+	  list-style: none;
+	  padding: 0;
+	  display: flex;
+	  justify-content: center;
+	  margin-top: 20px;
+	}
+	
+	li {
+	  margin: 0 5px;
+	}
+
+</style>
 </head>
 <body>
 	<h1>Home</h1>
