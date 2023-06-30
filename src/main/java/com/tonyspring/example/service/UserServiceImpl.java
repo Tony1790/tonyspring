@@ -25,38 +25,44 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	   public Collection<GrantedAuthority> getAuthorities(String username) {
-	      List<GrantedAuthority> authorities = userMapper.readAuthorities(username);
-	      return authorities;
-	   }
-	   
-	   @Override
-	   public void createUser(User user) {
-	      userMapper.createUser(user);
-	   }
+	public Collection<GrantedAuthority> getAuthorities(String username) {
+		List<GrantedAuthority> authorities = userMapper.readAuthorities(username);
+		return authorities;
+	}
 
-	   @Override
-	   public void createAuthorities(User user) {
-	      userMapper.createAuthority(user);
-	   }
+	@Override
+	public void createUser(User user) {
+		userMapper.createUser(user);
+	}
 
-	   @Override
-	   public User readUser(String username) {
-	      return userMapper.readUser(username);
-	   }
-	   
-	   @Override
-	   public List<User> selectUserList() {
-		   return userMapper.selectUserList();
-	   }
-	   
-	   @Override
-	   public void editUser(User user) {
-		   userMapper.editUser(user);
-	   }
-	   
-	   @Override
-	   public void deleteUser(User user) {
-		   userMapper.deleteUser(user);
-	   }
+	@Override
+	public void createAuthorities(User user) {
+		userMapper.createAuthority(user);
+	}
+
+	@Override
+	public User readUser(String username) {
+		return userMapper.readUser(username);
+	}
+
+	@Override
+	public List<User> selectUserList() {
+		return userMapper.selectUserList();
+	}
+
+	@Override
+	public void editUser(User user) {
+		userMapper.editUser(user);
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		userMapper.deleteUser(user);
+	}
+	
+	@Override
+	public int countUsers() {
+		return userMapper.countUsers();
+	}
+	
 }

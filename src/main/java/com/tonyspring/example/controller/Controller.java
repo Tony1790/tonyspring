@@ -32,13 +32,23 @@ public class Controller {
 	CommentService commentservice;
 	@Autowired
 	PasswordEncoder encoder;
+	
+	int page = 1;
 
 	@RequestMapping("/")
-	public String home(Model model, Principal principal) {
+	public String home(Model model, Principal principal, Pagination pagination) {
 		// Authentication authentication = (Authentication) principal;
 		// UserDetails user = (User) authentication.getPrincipal();
-		List<Board> list = boardservice.selectBoardList();
+		
+		if(pagination.getPage() != 0) {
+			page = pagination.getPage();			
+		}
+		pagination.setPage(page);
+		pagination.setCount(boardservice.countBoards());
+		pagination.init();
+		List<Board> list = boardservice.selectBoardList(pagination);
 		model.addAttribute("list", list);
+		model.addAttribute("pagination", pagination);
 		logger.debug("debug");
 		logger.info("info");
 		logger.error("error");
@@ -149,7 +159,7 @@ public class Controller {
 	@RequestMapping(value="/board/create")
 	public String CreateBoard(Model model, Board board) {
 		boardservice.createBoard(board);
-		home(model, null);
+		home(model, null, null);
 		return "/index";
 	}
 	
@@ -185,7 +195,7 @@ public class Controller {
 	public String deleteBoard(Board board, Model model) {
 		board.setbId(board.getbId());
 		boardservice.deleteBoard(board);
-		home(model, null);
+		home(model, null, null);
 		return "/index";
 	}
 	
@@ -202,7 +212,7 @@ public class Controller {
 	@RequestMapping(value = "/board/recreate")
 	public String recreateBoard(Board board, Model model) {
 		boardservice.createReboard(board);
-		home(model, null);
+		home(model, null, null);
 		return "/index";
 	}
 	
@@ -262,6 +272,7 @@ public class Controller {
 		model.addAttribute("list", list);
 		return "/index";
 	}
+	
 }
 
 

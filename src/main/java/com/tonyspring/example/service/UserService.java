@@ -28,4 +28,7 @@ public interface UserService extends UserDetailsService {
 	   
 	   //유저 삭제
 	   public void deleteUser(User user);
+	   
+	   public int countUsers();
+	   
 }

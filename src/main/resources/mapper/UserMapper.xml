@@ -75,4 +75,11 @@
     	FROM		tn_user
     	WHERE		u_id = #{username}
     </delete>
+    
+    <select id="countUsers" resultType="Integer">
+    	SELECT		count(*) count
+    	FROM		tn_user
+    </select>
+    
+    
 </mapper>

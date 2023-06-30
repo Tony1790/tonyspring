@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tonyspring.example.domain.Board;
+import com.tonyspring.example.domain.Pagination;
 import com.tonyspring.example.domain.Search;
 import com.tonyspring.example.mapper.BoardMapper;
 
@@ -11,8 +12,8 @@ import com.tonyspring.example.mapper.BoardMapper;
 public class BoardServicelmpl implements BoardService {
 	@Autowired BoardMapper boardmapper;
 	@Override
-	public List<Board> selectBoardList() {
-		return boardmapper.selectBoardList();
+	public List<Board> selectBoardList(Pagination pagination) {
+		return boardmapper.selectBoardList(pagination);
 	}
 	
 	@Override
@@ -47,4 +48,10 @@ public class BoardServicelmpl implements BoardService {
 	public List<Board> searchBoard(Search search) {
 		return boardmapper.searchBoard(search);
 	}
+	
+	@Override
+	public int countBoards() {
+		return boardmapper.countBoards();
+	}
+
 }

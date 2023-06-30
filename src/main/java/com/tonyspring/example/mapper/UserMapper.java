@@ -28,4 +28,7 @@ public interface UserMapper {
 	   
 		/* 회원 정보 삭제 */
 	   public void deleteUser(User user);
+	   
+		/*회원 수 카운트*/
+	   public int countUsers();
 }

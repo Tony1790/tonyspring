@@ -9,6 +9,7 @@
 		                 b_datetime as bDateTime 
 	      FROM           tn_board
 	      ORDER BY		 b_group DESC, b_order ASC
+	      LIMIT			 #{pageNum}, #{perPage}
 	 </select>
 	 
 	<insert id="createBoard" parameterType="Board">
@@ -111,6 +112,11 @@
 	 		</when>
 	 	</choose>
 	 	ORDER BY		 b_group DESC, b_order ASC
+	 </select>
+	 
+	 <select id="countBoards" resultType="Integer">
+	 	SELECT		count(*) count
+	 	FROM 		tn_board
 	 </select>
 </mapper>
 
