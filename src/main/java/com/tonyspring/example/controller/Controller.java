@@ -157,9 +157,9 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/board/create")
-	public String CreateBoard(Model model, Board board) {
+	public String CreateBoard(Model model, Board board, Pagination pagination) {
 		boardservice.createBoard(board);
-		home(model, null, null);
+		home(model, null, pagination);
 		return "/index";
 	}
 	

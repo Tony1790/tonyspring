@@ -76,6 +76,12 @@
     	WHERE		u_id = #{username}
     </delete>
     
+    <delete id="deleteAuthority">
+    	DELETE		tn_auth.*
+    	FROM		tn_auth
+    	WHERE		u_id = #{username}
+    </delete>
+    
     <select id="countUsers" resultType="Integer">
     	SELECT		count(*) count
     	FROM		tn_user

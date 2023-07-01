@@ -20,6 +20,9 @@ public interface UserMapper {
 	   // 권한 생성
 	   public void createAuthority(User user);
 	   
+	   /* 권한 삭제 */
+	   public void deleteAuthority(User user);
+	   
 	   //유저리스트 가져오기
 	   public List<User> selectUserList();
 	   
@@ -31,4 +34,5 @@ public interface UserMapper {
 	   
 		/*회원 수 카운트*/
 	   public int countUsers();
+	   
 }

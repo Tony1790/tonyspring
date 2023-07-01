@@ -110,18 +110,39 @@ table, th, td {
 		<tr>
 			<td>내용 : ${board.bContent}</td>
 		</tr>
-		
-		<tr>
-			<td class="edit_td_btn">
-				<a class="edit_btn" href="/board/before-edit?bId=${board.bId}">수정</a>
-			</td>
-			<td class="delete_td_btn">
-				<a class="delete_btn" href="/board/delete?bId=${board.bId}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
-			</td>
-			<td class="re_content_btn">
-				<a class="re_content_btn" href="/board/beforeRecreate?bId=${board.bId}">답글</a>
-			</td>
-		</tr>
+		<sec:authorize access="isAuthenticated()">
+			<sec:authentication property="principal" var="principal"/>
+			<!-- 작성자가 접속했을 때 -->
+			<c:if test="${principal.username == board.bWriter}">
+				<tr>
+					<td class="edit_td_btn"><a class="edit_btn"
+						href="/board/before-edit?bId=${board.bId}">수정</a></td>
+					<td class="delete_td_btn"><a class="delete_btn"
+						href="/board/delete?bId=${board.bId}"
+						onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a></td>
+					<td class="re_content_btn"><a class="re_content_btn"
+						href="/board/beforeRecreate?bId=${board.bId}">답글</a></td>
+				</tr>
+			</c:if>
+			
+			<!-- 작성자는 아니지만 관리자가 접속했을때 -->
+			<c:if test="${principal.username != board.bWriter && principal.authorities == 'ROLE_ADMIN'}">
+				<tr>
+					<td class="delete_td_btn"><a class="delete_btn"
+						href="/board/delete?bId=${board.bId}"
+						onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a></td>
+					<td class="re_content_btn"><a class="re_content_btn"
+						href="/board/beforeRecreate?bId=${board.bId}">답글</a></td>
+				</tr>
+			</c:if>
+			<!-- 작성자도 아니고, 관리자도 아닌 일반회원일 때 -->
+			<c:if test="${principal.username != board.bWriter && principal.authorities == 'ROLE_USER'}">
+				<tr>
+					<td class="re_content_btn"><a class="re_content_btn"
+						href="/board/beforeRecreate?bId=${board.bId}">답글</a></td>
+				</tr>
+			</c:if>
+		</sec:authorize>
 	</table>
 
 	<div class="cmt_container">
