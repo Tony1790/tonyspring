@@ -88,6 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return db;
 	}
 	
+	
+	
 	//security 기본 설정
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {

@@ -126,7 +126,7 @@ table, th, td {
 			</c:if>
 			
 			<!-- 작성자는 아니지만 관리자가 접속했을때 -->
-			<c:if test="${principal.username != board.bWriter && principal.authorities == 'ROLE_ADMIN'}">
+			<c:if test="${principal.username != board.bWriter && principal.authorities == '[ROLE_ADMIN]'}">
 				<tr>
 					<td class="delete_td_btn"><a class="delete_btn"
 						href="/board/delete?bId=${board.bId}"
@@ -136,7 +136,7 @@ table, th, td {
 				</tr>
 			</c:if>
 			<!-- 작성자도 아니고, 관리자도 아닌 일반회원일 때 -->
-			<c:if test="${principal.username != board.bWriter && principal.authorities == 'ROLE_USER'}">
+			<c:if test="${principal.username != board.bWriter && principal.authorities == '[ROLE_USER]'}">
 				<tr>
 					<td class="re_content_btn"><a class="re_content_btn"
 						href="/board/beforeRecreate?bId=${board.bId}">답글</a></td>
@@ -176,12 +176,16 @@ table, th, td {
 				</ul>
 			</div>
 		</div>
-		<div class="cmt_editor">
-			<textarea rows="5" cols="25" name=c_content
-				placeholder="댓글을 입력하세요" wrap="soft" required></textarea>
-			<input type="hidden" name="b_id" value="${board.bId}" />
-			<button type="submit" class="cmt_submit_btn" bId="${board.bId}">작성</button>
-		</div>
+		
+		<sec:authorize access="isAuthenticated()">
+			<div class="cmt_editor">
+				<textarea rows="5" cols="25" name=c_content placeholder="댓글을 입력하세요"
+					wrap="soft" required></textarea>
+				<input type="hidden" name="b_id" value="${board.bId}" />
+				<button type="submit" class="cmt_submit_btn" bId="${board.bId}">작성</button>
+			</div>
+		</sec:authorize>
+		
 	</div>
 </body>
 <script>
