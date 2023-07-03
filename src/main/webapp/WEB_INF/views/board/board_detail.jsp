@@ -96,6 +96,7 @@ table, th, td {
 </head>
 <body>
 	<h1>게시글 상세페이지</h1>
+	<sec:authentication property="principal" var="principal"/>
 	<table>
 		<tr>
 			<td colspan="2"> 제목 : ${board.bTitle}</td>
@@ -111,7 +112,6 @@ table, th, td {
 			<td>내용 : ${board.bContent}</td>
 		</tr>
 		<sec:authorize access="isAuthenticated()">
-			<sec:authentication property="principal" var="principal"/>
 			<!-- 작성자가 접속했을 때 -->
 			<c:if test="${principal.username == board.bWriter}">
 				<tr>
@@ -163,14 +163,27 @@ table, th, td {
 							<div>
 								<span>${comment.c_date}</span>
 							</div>
-							<button class="recmt-generate-btn">답글</button>
-							<button class="recmt-edit-btn" c_id = "${comment.c_id}">수정</button>
-							<button class="recmt-delete-btn" c_id = "${comment.c_id}" b_id="${board.bId}">삭제</button>
-							<div class="recmt-generater" style="display: none">
-								<textarea rows="2" cols="80"></textarea>
-								<button type="button" class="recmt-submit-btn" c_id = "${comment.c_id}">등록</button>
-								<button type="button" class="recmt-cancel-btn">취소</button>
-							</div>
+							<sec:authorize access="isAuthenticated()">
+								<c:if test="${principal.username != comment.c_writer && principal.authorities == '[ROLE_USER]'}">
+									<button class="recmt-generate-btn">답글</button>
+								</c:if>
+								<c:if test="${principal.username == comment.c_writer}">
+									<button class="recmt-generate-btn">답글</button>
+									<button class="recmt-edit-btn" c_id="${comment.c_id}">수정</button>
+									<button class="recmt-delete-btn" c_id="${comment.c_id}"
+										b_id="${board.bId}">삭제</button>
+								</c:if>
+								<c:if test="${principal.username != comment.c_writer && principal.authorities == '[ROLE_ADMIN]'}">
+									<button class="recmt-generate-btn">답글</button>
+									<button class="recmt-delete-btn" c_id="${comment.c_id}" b_id="${board.bId}">삭제</button>
+								</c:if>
+								<div class="recmt-generater" style="display: none">
+									<textarea rows="2" cols="80"></textarea>
+									<button type="button" class="recmt-submit-btn"
+										c_id="${comment.c_id}">등록</button>
+									<button type="button" class="recmt-cancel-btn">취소</button>
+								</div>
+							</sec:authorize>
 						</li>
 					</c:forEach>
 				</ul>

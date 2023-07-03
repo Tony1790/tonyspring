@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tonyspring.example.domain.*;
 import com.tonyspring.example.service.*;
+import com.tonyspring.example.util.*;
 
 @org.springframework.stereotype.Controller
 public class Controller {
@@ -151,6 +152,7 @@ public class Controller {
 		return "/denied";
 	}
 	
+	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/board/before-create")
 	public String boardBeforeCreate(Model model, Principal principal) {
 		Authentication authentication = (Authentication) principal;
@@ -159,6 +161,7 @@ public class Controller {
 		return "/board/board_before_create";
 	}
 	
+	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value="/board/create")
 	public String CreateBoard(Model model, Board board, Pagination pagination) {
 		boardservice.createBoard(board);
@@ -177,39 +180,28 @@ public class Controller {
 		return "/board/board_detail";
 	}
 	
+	@PreAuthorize("@checker.isWriter(#principal, #board)")
 	@RequestMapping(value="/board/before-edit")
-	public String beforeEditBoard(@RequestParam String bId, Model model, Board board) {
-		board.setbId(Integer.parseInt(bId));
+	public String beforeEditBoard(Model model, Board board, Principal principal) {
 		Board board1 = boardservice.getBoard(board);
 		model.addAttribute("board",board1);
 		return "/board/board_edit";
 	}
 	
+	@PreAuthorize("@checker.isWriter(#principal, #board)")
 	@RequestMapping(value = "/board/edit")
-	public String editBoard(@RequestParam String bId, Board board, Model model, Comment comment) {
-		board.setbId(Integer.parseInt(bId));
+	public String editBoard(Board board, Model model, Comment comment, Principal principal) {
 		boardservice.editBoard(board);
 		detailBoard(model, board, comment);
 		return "/board/board_detail";
 	}
 	
-	
+	@PreAuthorize("hasRole('ROLE_USER') and @checker.isWriter(#principal, #board) or hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/board/delete")
-	public String deleteBoard(Board board, Model model, Principal principal, Pagination pagination) {
-		Authentication authentication = (Authentication) principal;
-		UserDetails user = (User) authentication.getPrincipal();
-		board = boardservice.getBoard(board);
-		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-		
-		for(GrantedAuthority authority : authorities) {
-			if(authority.getAuthority().equals("ROLE_ADMIN") || user.getUsername().equals(board.getbWriter())) {
-				boardservice.deleteBoard(board);
-				home(model, pagination);
-				return "/index";
-			} 
-		}
-		denied(model);
-		return "/denied";
+	public String deleteBoard(Board board, Model model,Pagination pagination) {
+		boardservice.deleteBoard(board);
+		home(model, pagination);
+		return "/index";
 	}
 	
 	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
@@ -223,6 +215,7 @@ public class Controller {
 		return "/board/before-recreate";
 	}
 	
+	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/board/recreate")
 	public String recreateBoard(Board board, Model model) {
 		boardservice.createReboard(board);
@@ -230,6 +223,7 @@ public class Controller {
 		return "/index";
 	}
 	
+	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/comment/create")
 	public String createComment(Model model ,Comment comment, Principal principal) {
 		Authentication authentication = (Authentication) principal;
@@ -251,14 +245,16 @@ public class Controller {
 		return comment1;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER') and @checker.isCommentWriter(#principal, #comment) or hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/recomment/delete")
-	public String recommentDelete(Comment comment, Model model) {
+	public String recommentDelete(Comment comment, Model model, Principal principal) {
 		commentservice.deleteComment(comment);
 		List<Comment> commentList = commentservice.readComments(comment);
 		model.addAttribute("commentList",commentList);
 		return "/comment/comment-list";
 	}
 	
+	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value="/recomment/create")
 	public String recommentCreate(Comment comment, Model model, Principal principal) {
 		Comment comment1 = commentservice.readComment(comment);
@@ -272,8 +268,9 @@ public class Controller {
 		return "/comment/comment-list";
 	}
 	
+	@PreAuthorize("@checker.isCommentWriter(#principal, #comment)")
 	@RequestMapping(value = "/comment/edit")
-	public String commentEdit(Comment comment, Model model) {
+	public String commentEdit(Comment comment, Model model, Principal principal) {
 		Comment comment1 = commentservice.editComment(comment);
 		List<Comment> commentList = commentservice.readComments(comment1);
 		model.addAttribute("commentList",commentList);
