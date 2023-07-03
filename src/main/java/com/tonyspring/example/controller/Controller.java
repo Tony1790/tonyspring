@@ -1,6 +1,7 @@
 package com.tonyspring.example.controller;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +39,7 @@ public class Controller {
 	int page = 1;
 
 	@RequestMapping("/")
-	public String home(Model model, Principal principal, Pagination pagination) {
+	public String home(Model model, Pagination pagination) {
 		// Authentication authentication = (Authentication) principal;
 		// UserDetails user = (User) authentication.getPrincipal();
 		
@@ -101,7 +103,7 @@ public class Controller {
 		return "/user_list";
 	}
 
-	@Secured({ "ROLE_USER" })
+	@Secured({ "ROLE_USER" , "ROLE_ADMIN"})
 	@RequestMapping(value = "/user/info")
 	public String userInfo(Model model) {
 		return "/user_info";
@@ -149,7 +151,6 @@ public class Controller {
 		return "/denied";
 	}
 	
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@RequestMapping(value = "/board/before-create")
 	public String boardBeforeCreate(Model model, Principal principal) {
 		Authentication authentication = (Authentication) principal;
@@ -158,16 +159,13 @@ public class Controller {
 		return "/board/board_before_create";
 	}
 	
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@RequestMapping(value="/board/create")
 	public String CreateBoard(Model model, Board board, Pagination pagination) {
 		boardservice.createBoard(board);
-		home(model, null, pagination);
+		home(model, pagination);
 		return "/index";
 	}
 	
-	//@Secured({ "ROLE_ADMIN" })
-	@PreAuthorize("principal.username == #list.bWriter")
 	@RequestMapping(value="/board/detail")
 	public String detailBoard(Model model, Board board, Comment comment) {
 		//board.setbId(Integer.parseInt(bId)); 
@@ -179,7 +177,6 @@ public class Controller {
 		return "/board/board_detail";
 	}
 	
-	@PreAuthorize("#username == authentication.principal.username")
 	@RequestMapping(value="/board/before-edit")
 	public String beforeEditBoard(@RequestParam String bId, Model model, Board board) {
 		board.setbId(Integer.parseInt(bId));
@@ -188,7 +185,6 @@ public class Controller {
 		return "/board/board_edit";
 	}
 	
-	@PreAuthorize("#username == authentication.principal.username")
 	@RequestMapping(value = "/board/edit")
 	public String editBoard(@RequestParam String bId, Board board, Model model, Comment comment) {
 		board.setbId(Integer.parseInt(bId));
@@ -199,13 +195,24 @@ public class Controller {
 	
 	
 	@RequestMapping(value = "/board/delete")
-	public String deleteBoard(Board board, Model model) {
-		board.setbId(board.getbId());
-		boardservice.deleteBoard(board);
-		home(model, null, null);
-		return "/index";
+	public String deleteBoard(Board board, Model model, Principal principal, Pagination pagination) {
+		Authentication authentication = (Authentication) principal;
+		UserDetails user = (User) authentication.getPrincipal();
+		board = boardservice.getBoard(board);
+		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+		
+		for(GrantedAuthority authority : authorities) {
+			if(authority.getAuthority().equals("ROLE_ADMIN") || user.getUsername().equals(board.getbWriter())) {
+				boardservice.deleteBoard(board);
+				home(model, pagination);
+				return "/index";
+			} 
+		}
+		denied(model);
+		return "/denied";
 	}
 	
+	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value = "/board/beforeRecreate") 
 	public String beforeRecreateBoard(Board board, Principal principal, Model model) {
 		Authentication authentication = (Authentication) principal;
@@ -219,7 +226,7 @@ public class Controller {
 	@RequestMapping(value = "/board/recreate")
 	public String recreateBoard(Board board, Model model) {
 		boardservice.createReboard(board);
-		home(model, null, null);
+		home(model, null);
 		return "/index";
 	}
 	

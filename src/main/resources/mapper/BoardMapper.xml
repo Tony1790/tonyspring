@@ -51,7 +51,7 @@
 	 </update>
 	 
 	 <delete id="deleteBoard" parameterType="Board">
-	 	DELETE		tn_board.* 
+	 	DELETE		
 	 	FROM		tn_board 
 	 	WHERE		b_id = #{bId} 
 	 </delete>
