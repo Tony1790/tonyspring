@@ -21,6 +21,12 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-jdbc'
 	implementation 'org.springframework.security:spring-security-taglibs'
 	
+	compileOnly 'org.projectlombok:lombok:1.18.28'
+	annotationProcessor 'org.projectlombok:lombok:1.18.28'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.28'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+	
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.3' // replace MySQL driver with MariaDB
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -29,6 +35,12 @@ dependencies {
 	implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.69'
 	// https://mvnrepository.com/artifact/jstl/jstl
 	implementation group: 'jstl', name: 'jstl', version: '1.2'
+	// https://mvnrepository.com/artifact/net.coobird/thumbnailator
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.0'
+	
+	
 }
 
 tasks.named('test') {
