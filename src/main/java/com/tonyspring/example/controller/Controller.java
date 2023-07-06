@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.http.HttpHeaders;
 import java.nio.file.Files;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
@@ -16,6 +19,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +33,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -349,6 +356,7 @@ public class Controller {
 			UUID uuid = UUID.randomUUID();
 			
 			uploadFileName = uuid.toString() + "_" + uploadFileName;
+			logger.info("uploadFileName is " +uploadFileName);
 			
 			try {
 				File saveFile = new File(uploadPath, uploadFileName);
@@ -388,6 +396,91 @@ public class Controller {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/*
+	 * 문자열로 파일의 경로가 포함된 파일이름을 파라미터로 받아서 byte[]를 전송한다. 
+	 * byte[]형식으로 이미지 파일의 데이터를 전송할 때는 브라우저에 보내는 MIME(Multipurpose Internet Mail Extensions, Ex)text/html,image/jpeg, application/json)
+	 * 타입이 파일의 종류에 따라 달라지기 때문에 probeContentType()을 이용해서 적절한 MIME타입 데이터를 Http헤더 메시지에 포함할 수 있도록 처리함.(try 부분)
+	 */
+	@RequestMapping("/display")
+	@ResponseBody
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		logger.info("fileName : " + fileName);
+		
+		File file = new File("C:\\upload\\" + fileName);
+		
+		logger.info("file : " + file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			org.springframework.http.HttpHeaders header = new org.springframework.http.HttpHeaders();
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/* MIME타입은 다운로드를 할 수 있는 APPLICATION_OCTET_STREAM_VALUE으로 지정, 
+	 * 다운로드시 저장되는 이름은 Content-Disposition을 이용해서 저장한다...
+	 * */ 
+	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName) {		
+		FileSystemResource resource = new FileSystemResource("C:\\upload\\" + fileName);
+
+		if(resource.exists() == false) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		String resourceName = resource.getFilename();
+		
+		//UUID 삭제
+		String resourceOriginalName = resourceName.substring(resourceName.indexOf("_") + 1);
+		
+		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+		
+		try {
+			
+			String downloadName = null;
+			
+			downloadName = new String(resourceOriginalName.getBytes("UTF-8"), "ISO-8859-1");
+			
+			logger.info("downloadName : " + downloadName);
+			
+			headers.add("Content-Disposition", "attachment; filename=" + downloadName);
+			
+		} catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}		
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
+	
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public ResponseEntity<String> deleteFile(String fileName, String type) {
+		logger.info("delete File: " + fileName);
+		File file;
+		
+		try {
+			file = new File("C:\\upload\\" + URLDecoder.decode(fileName, "UTF-8"));
+			file.delete();
+			
+			if(type.equals("image")) {
+				String largeFileName = file.getAbsolutePath().replace("s_", "");
+				logger.info("largeFileName : " + largeFileName);
+				file = new File(largeFileName);
+				file.delete();
+			}
+			
+		} catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
 }
 
