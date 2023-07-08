@@ -1,7 +1,10 @@
 package com.tonyspring.example.domain;
 
+import lombok.Data;
+import java.util.List;
 import java.time.LocalDateTime;
 
+@Data
 public class Board {
 	private int bId;
 	private String bTitle;
@@ -11,7 +14,14 @@ public class Board {
 	private int bGroup;
 	private int bOrder;
 	private int bDepth;
+	private List<BoardAttachVO> attachList;
 	
+	public List<BoardAttachVO> getAttachList() {
+		return attachList;
+	}
+	public void setAttachList(List<BoardAttachVO> attachList) {
+		this.attachList = attachList;
+	}
 	public int getbGroup() {
 		return bGroup;
 	}
@@ -60,4 +70,12 @@ public class Board {
 	public void setbDateTime(LocalDateTime bDateTime) {
 		this.bDateTime = bDateTime;
 	}
+	@Override
+	public String toString() {
+		return "Board [bId=" + bId + ", bTitle=" + bTitle + ", bContent=" + bContent + ", bWriter=" + bWriter
+				+ ", bDateTime=" + bDateTime + ", bGroup=" + bGroup + ", bOrder=" + bOrder + ", bDepth=" + bDepth
+				+ ", attachList=" + attachList + "]";
+	}
+	
+	
 }

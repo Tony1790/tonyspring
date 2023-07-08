@@ -40,12 +40,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tonyspring.example.domain.*;
 import com.tonyspring.example.service.*;
 import com.tonyspring.example.util.*;
 
-import lombok.*;
+import lombok.Data;
 import net.coobird.thumbnailator.Thumbnailator;
 
 @org.springframework.stereotype.Controller
@@ -187,10 +188,19 @@ public class Controller {
 	
 	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value="/board/create")
-	public String CreateBoard(Model model, Board board, Pagination pagination) {
-		boardservice.createBoard(board);
+	public String CreateBoard(Model model, Board board, Pagination pagination, RedirectAttributes rttr) {
+		
+		logger.info("======================================");
+		logger.info("Board Create: " + board.toString());
+		
+		if (board.getAttachList() != null) {
+			board.getAttachList().forEach(attach -> logger.info(attach.toString()));
+		}
+		
+		logger.info("======================================");
+		//boardservice.createBoard(board);
 		home(model, pagination);
-		return "/index";
+		return "redirect:/index";
 	}
 	
 	@RequestMapping(value="/board/detail")
