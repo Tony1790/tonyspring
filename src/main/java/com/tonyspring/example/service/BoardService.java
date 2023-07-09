@@ -2,6 +2,7 @@ package com.tonyspring.example.service;
 
 import java.util.List;
 import com.tonyspring.example.domain.Board;
+import com.tonyspring.example.domain.BoardAttachVO;
 import com.tonyspring.example.domain.Pagination;
 import com.tonyspring.example.domain.Search;
 
@@ -22,4 +23,5 @@ public interface BoardService {
 	
 	public int countBoards();
 	
+	public List<BoardAttachVO> getAttachList(int b_id);
 }

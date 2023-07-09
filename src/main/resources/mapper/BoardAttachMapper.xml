@@ -18,4 +18,10 @@
 		FROM		tn_attach
 		WHERE		b_id = #{b_id}
 	</select>
+	
+	<delete id="deleteAll">
+		DELETE
+		FROM	tn_attach
+		WHERE	b_id = #{b_id}
+	</delete>
 </mapper>

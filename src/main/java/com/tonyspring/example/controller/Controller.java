@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.http.HttpHeaders;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -188,7 +190,7 @@ public class Controller {
 	
 	@Secured({ "ROLE_USER", "ROLE_ADMIN"})
 	@RequestMapping(value="/board/create")
-	public String CreateBoard(Model model, Board board, Pagination pagination, RedirectAttributes rttr) {
+	public String CreateBoard(Model model, Board board, Pagination pagination) {
 		
 		logger.info("======================================");
 		logger.info("Board Create: " + board.toString());
@@ -198,9 +200,9 @@ public class Controller {
 		}
 		
 		logger.info("======================================");
-		//boardservice.createBoard(board);
+		boardservice.createBoard(board);
 		home(model, pagination);
-		return "redirect:/index";
+		return "/index";
 	}
 	
 	@RequestMapping(value="/board/detail")
@@ -229,11 +231,24 @@ public class Controller {
 		detailBoard(model, board, comment);
 		return "/board/board_detail";
 	}
+	@RequestMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<BoardAttachVO>> getAttachList(int b_id) {
+		logger.info("getAttachList : " + b_id);
+		
+		return new ResponseEntity<>(boardservice.getAttachList(b_id), HttpStatus.OK);
+	}
+	
 	
 	@PreAuthorize("hasRole('ROLE_USER') and @checker.isWriter(#principal, #board) or hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/board/delete")
 	public String deleteBoard(Board board, Model model,Pagination pagination) {
+		List<BoardAttachVO> attachList = boardservice.getAttachList(board.getbId());
+		
+		deleteFiles(attachList);
+		
 		boardservice.deleteBoard(board);
+		
 		home(model, pagination);
 		return "/index";
 	}
@@ -492,6 +507,32 @@ public class Controller {
 		}
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
+	
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		
+		logger.info("delete attach files..................");
+		logger.info(attachList.toString());
+		
+		attachList.forEach(attach -> {
+			try {
+				Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+ "\\" + attach.getUuid() + "_" + attach.getFileName());
+				
+				Files.deleteIfExists(file);
+				
+				if(Files.probeContentType(file).startsWith("image")) {
+					Path thumbnail = Paths.get("C:\\upload\\"+attach.getUploadPath()+ "\\s_" + attach.getUuid() + "_" + attach.getFileName());
+					
+					Files.delete(thumbnail);
+				}
+			} catch(Exception e) {
+				logger.info("delete file error" + e.getMessage());
+			}
+		});
+	}
+	
 }
 
 

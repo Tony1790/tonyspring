@@ -14,6 +14,8 @@ public interface BoardMapper {
 	
 	public void updateBoard(Board board);
 	
+	public Board getBoardJustMade();
+	
 	public Board getBoard(Board board);
 	
 	public void editBoard(Board board);

@@ -43,6 +43,12 @@
 	 	WHERE		b_id = #{bId}
 	 </select>
 	 
+	 <select id="getBoardJustMade" resultType="Board">
+	 	SELECT		b_id as bId
+	 	FROM		tn_board
+	 	WHERE		b_id = LAST_INSERT_ID()
+	 </select>
+	 
 	 <update id="editBoard" parameterType="Board">
 	 	UPDATE		tn_board 
 	 	SET			b_title = #{bTitle},
