@@ -113,7 +113,7 @@ table, th, td {
 }
 
 .uploadResult ul li img {
-	width: 100px;
+	width: 70px;
 }
 
 .uploadResult ul li span {
@@ -304,7 +304,7 @@ table, th, td {
 		             
 		           str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
 		           str += "<span> "+ attach.fileName+"</span><br/>";
-		           str += "<img src='/resources/img/attach.png'></a>";
+		           str += "<img src='/img/attach.jpg'></a>";
 		           str += "</div>";
 		           str +"</li>";
 		         }
@@ -331,21 +331,21 @@ table, th, td {
 
 	function showImage(fileCallPath){
 	    
-	    alert(fileCallPath);
+	    //alert(fileCallPath);
 	    
 	    $(".bigPictureWrapper").css("display","flex").show();
 	    
 	    $(".bigPicture")
 	    .html("<img src='/display?fileName="+fileCallPath+"' >")
-	    .animate({width:'100%', height: '100%'}, 1000);
+	    .animate({width:'100%', height: '100%'}, 300);
 	    
 	  }
 
 	  $(".bigPictureWrapper").on("click", function(e){
-	    $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+	    $(".bigPicture").animate({width:'0%', height: '0%'}, 300);
 	    setTimeout(function(){
 	      $('.bigPictureWrapper').hide();
-	    }, 1000);
+	    }, 300);
 	  });
 	
 	
